@@ -2,13 +2,6 @@ plugins {
     kotlin("jvm")
 }
 
-group = "com.limelanguage"
-version = parent?.version ?: "undefined"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     testImplementation(kotlin("test"))
 }

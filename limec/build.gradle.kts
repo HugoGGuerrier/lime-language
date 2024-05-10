@@ -3,13 +3,6 @@ plugins {
     application
 }
 
-group = "com.limelanguage"
-version = parent?.version ?: "undefined"
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     // Dependency on the Lime frontend library
     implementation(project(":liblimelang"))
