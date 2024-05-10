@@ -25,8 +25,8 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
 
 // Define common settings for subprojects
 subprojects {
-    group = "com.limelanguage"
-    version = "0.1"
+    group = parent?.group ?: "undefined"
+    version = parent?.version ?: "undefined"
 
     repositories {
         mavenCentral()
