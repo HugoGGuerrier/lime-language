@@ -46,4 +46,6 @@ subprojects {
 // Simplify the files formatting
 task("fmt") {
     dependsOn("ktlintFormat")
+    dependsOn(":liblimelang:ktlintFormat")
+    dependsOn(":limec:ktlintFormat")
 }
