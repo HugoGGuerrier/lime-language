@@ -2,7 +2,10 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 // Project-wide plugins
 plugins {
+    // Kotlin compiler
     kotlin("jvm") version "1.9.23"
+
+    // Kotlin style-checker
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
@@ -23,11 +26,20 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     }
 }
 
+// Simplify the files formatting by adding a "fmt" task
+task("fmt") {
+    dependsOn("ktlintFormat")
+    dependsOn(":liblimelang:ktlintFormat")
+    dependsOn(":limec:ktlintFormat")
+}
+
 // Define common settings for subprojects
 subprojects {
+    // Set their group and version according to the root project
     group = parent?.group ?: "undefined"
     version = parent?.version ?: "undefined"
 
+    // Tell them to retrieve dependencies from the Maven central
     repositories {
         mavenCentral()
     }
@@ -41,11 +53,4 @@ subprojects {
             reporter(ReporterType.JSON)
         }
     }
-}
-
-// Simplify the files formatting
-task("fmt") {
-    dependsOn("ktlintFormat")
-    dependsOn(":liblimelang:ktlintFormat")
-    dependsOn(":limec:ktlintFormat")
 }
