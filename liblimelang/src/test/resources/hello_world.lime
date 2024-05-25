@@ -1,0 +1,4 @@
+/** Display "Hello world!" in Lime */
+fun main() {
+    println("Hello world!")
+}

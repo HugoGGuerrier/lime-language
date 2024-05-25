@@ -1,3 +1,8 @@
 package com.limelanguage.parser
 
-class ParsingVisitor
+import com.limelanguage.ast.LimeNode
+
+/** This visitor translates visited Lime construct into AST nodes. */
+class ParsingVisitor : LimeBaseVisitor<LimeNode>() {
+    // TODO
+}
