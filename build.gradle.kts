@@ -22,7 +22,9 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     version.set("1.2.1")
     android.set(false)
     reporters {
-        reporter(ReporterType.JSON)
+        reporter(
+            ReporterType.JSON,
+        )
     }
 }
 
@@ -50,7 +52,9 @@ subprojects {
         version.set("1.2.1")
         android.set(false)
         reporters {
-            reporter(ReporterType.JSON)
+            reporter(
+                ReporterType.JSON,
+            )
         }
     }
 }
