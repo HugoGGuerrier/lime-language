@@ -78,7 +78,7 @@ fun add(x: int, y: int) {
 }
 ```
 
-As you can see, there is no `return` keyword in lime, this is because all
+As you can see, there is no `return` keyword in lime, this is because quite all
 language constructs are expressions, and the body of a function is just an
 arbitrary expression. You could then write:
 
@@ -88,9 +88,13 @@ fun add (x: int, y: int) x + y
 
 **Note:** In the future, the type annotations for parameters will be optional.
 
+**Note:** Function and constant declarations are considered as expressions of
+the `unit` type
+
 ## Expressions
 
-In the Lime language all semantic constructs are expressions then can be typed.
+In the Lime language quite all syntax constructs are expressions then can be
+typed and have a value.
 
 ### Block-Expression
 
@@ -114,10 +118,46 @@ const y = {
 }
 ```
 
+### Function calls
+
+You can call a function as in any other language, with some parentheses. A
+function call is an expression and its type will be the type of the called
+function result.
+
+```lime
+fun add(x: int, y: int) x + y
+
+// Call to the "add" function
+const added = add(40, 2)
+```
+
+In Lime, functions are first class citizens, so you can use the call syntax
+on all expressions (this expression has to be a callable type for the code to
+be valid).
+
+```lime
+// This function returns the "add" function
+fun get_add() {
+    fun add(x: int, y: int) x + y;
+    add
+}
+
+// Call to the "add" function
+const added = get_add()(40, 2)
+```
+
+### Literals
+
+Lime allows you to express literal values of many type. While this list will
+change in the future, here are the possible literals:
+ - Integer literal: `1`, `42` or `-90` - typed as `int`
+
 ## Lexical environments
 
 A lexical environment is a set of bindings associating symbols to their values.
-Some lexical constructs introduce a new lexical environment such as:
+Symbols declared in a lexical environment are only visible inside this one or
+its children.
+Here are the language constructs which introduce a new lexical environment:
  - Top-level
  - Function declaration
  - Block expression
@@ -125,4 +165,4 @@ Some lexical constructs introduce a new lexical environment such as:
 ## Features roadmap
 
  - Type declarations at top-level
- - 
+ - Function parameters type inference
