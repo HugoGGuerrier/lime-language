@@ -4,9 +4,9 @@
 
 Every lime source file defines a "module" named after the file name. It means
 that `main.lime` defines the `main` module. A module is defined by a **top-level
-construct**.
+construct**, either called a namespace.
 
-## The top-level
+## The top-level module
 
 A top-level can contain constant and function declarations.
 
@@ -41,27 +41,19 @@ const x = 40
 const y = 2
 ```
 
-## Constant declaration
+## Symbol declarations
 
-A constant value is declared through the `const` keyword. This value is
-initialized when the program starts and cannot be mutated during the execution.
-Please note that this value is internally immutable too:
+There are several ways to declare new symbols in lime. All those constructions
+are considered as expression of the `unit` value, however, since they
+represent a more imperative paradigm, they are not documented with other
+expressions.
 
-```lime
-const a = [1, 2, 3]
-const b = "First"
-
-fun main() {
-    a[0] = 50; // Will raise an error at compilation
-    b = "Second"; // Will also raise an error
-}
-```
-
-## Function declaration
+### Function declaration
 
 You can declare a function with this syntax to add a function in the current
 lexical environment. You may also declare the function's parameters and their
-types, and the function return type:
+types, and the function return type (please note that function parameters are
+immutable):
 
 ```lime
 fun add(x: int, y: int) -> int {
@@ -88,8 +80,52 @@ fun add (x: int, y: int) x + y
 
 **Note:** In the future, the type annotations for parameters will be optional.
 
-**Note:** Function and constant declarations are considered as expressions of
-the `unit` type
+### Constant declaration
+
+A constant value is declared through the `const` keyword. This value cannot
+be mutated during the execution, even internally. You can declare a constant
+in all lexical environment, including a top-level one.
+
+```lime
+const a = [1, 2, 3]
+const b = "First"
+
+fun main() {
+    const lst = a
+    lst[0] = 50; // Will raise an error at compilation
+    b = "Second"; // Will also raise an error
+}
+```
+
+You can add an explicit type annotation to ensure a constant type:
+
+```lime
+const x: int = 80
+const str: string = "Hello"
+```
+
+### Variable declaration
+
+You can declare a variable in any lexical environment except for the top-level
+one. A variable can be mutated and its value can be changed after its
+declaration. You can declare a new variable with the `let` keyword:
+
+```lime
+fun main() {
+    let x = 40;
+    let y = 2;
+}
+```
+
+As constant declaration, you may add a type annotation to a variable
+declaration:
+
+```lime
+fun main() {
+    let x: int = 40;
+    let y: string = "Hello";
+}
+```
 
 ## Expressions
 
