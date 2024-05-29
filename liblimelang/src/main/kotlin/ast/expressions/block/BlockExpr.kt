@@ -1,12 +1,15 @@
-package com.limelanguage.ast.expressions.literals
+package com.limelanguage.ast.expressions.block
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.expressions.Expr
 
-/** This class represents symbolic access in the Lime language. */
-class SymbolLiteral(
+/**
+ * This class represents a block expression in the Lime language, this is a collection of
+ * expressions.
+ */
+class BlockExpr(
     unit: AnalysisUnit,
     location: SourceSection,
-    val symbol: String,
+    val elems: BlockElems,
 ) : Expr(unit, location)

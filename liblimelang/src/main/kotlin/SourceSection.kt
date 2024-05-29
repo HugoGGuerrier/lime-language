@@ -1,7 +1,11 @@
 package com.limelanguage
 
 /** This class represents a location in a source, defined by its [line] and [column]. */
-data class SourceLocation(val line: Int, val column: Short)
+data class SourceLocation(val line: Int, val column: Int) {
+    companion object {
+        val FIRST: SourceLocation = SourceLocation(1, 0)
+    }
+}
 
 /**
  * This class represents a specific section from a source.

@@ -4,9 +4,8 @@ import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.expressions.Expr
 
-/** This class represents symbolic access in the Lime language. */
-class SymbolLiteral(
+/** This class represents a unit literal value in the Lime language. */
+class UnitLiteral(
     unit: AnalysisUnit,
     location: SourceSection,
-    val symbol: String,
 ) : Expr(unit, location)
