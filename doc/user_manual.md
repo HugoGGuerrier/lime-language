@@ -1,5 +1,21 @@
 # Lime user manual
 
+## Comments
+
+Lime is a simple language for simple people, no need to make things shitty: You
+can comment a line with `//` and comment a whole section with `/* ... */`.
+Example:
+
+```lime
+/** My function does something */
+fun do_something() { ... }
+
+// No need to comment this...
+fun main() {
+    do_something();
+}
+```
+
 ## The module system
 
 Every lime source file defines a "module" named after the file name. It means
@@ -70,13 +86,10 @@ fun add(x: int, y: int) {
 }
 ```
 
-As you can see, there is no `return` keyword in lime, this is because quite all
-language constructs are expressions, and the body of a function is just an
-arbitrary expression. You could then write:
-
-```lime
-fun add (x: int, y: int) x + y
-```
+As you can see, there is no `return` keyword in lime, this is because the block
+construct after a function declaration is an expression (see the 
+*Block-expression* section). Thus, the result of the function is the value of
+this expression.
 
 **Note:** In the future, the type annotations for parameters will be optional.
 
@@ -97,7 +110,7 @@ fun main() {
 }
 ```
 
-You can add an explicit type annotation to ensure a constant type:
+You can add an explicit type annotation to the constant declaration:
 
 ```lime
 const x: int = 80
@@ -124,6 +137,22 @@ declaration:
 fun main() {
     let x: int = 40;
     let y: string = "Hello";
+}
+```
+
+Unlike constants, variables are mutable, so it is possible to change their
+value after its declaration. It is also possible to declare a variable without
+any value and defer its initialization. In that case, you MUST provide a type
+annotation to the variable.
+
+```lime
+fun main {
+    let x: string;
+    let y = "Hello ";
+    
+    y = x + y;
+    
+    print(y);
 }
 ```
 
@@ -161,7 +190,7 @@ function call is an expression and its type will be the type of the called
 function result.
 
 ```lime
-fun add(x: int, y: int) x + y
+fun add(x: int, y: int) { x + y }
 
 // Call to the "add" function
 const added = add(40, 2)
@@ -174,7 +203,7 @@ be valid).
 ```lime
 // This function returns the "add" function
 fun get_add() {
-    fun add(x: int, y: int) x + y;
+    fun add(x: int, y: int) { x + y };
     add
 }
 
@@ -186,7 +215,10 @@ const added = get_add()(40, 2)
 
 Lime allows you to express literal values of many type. While this list will
 change in the future, here are the possible literals:
+ - Unit literal: `()` - typed as `unit`
  - Integer literal: `1`, `42` or `-90` - typed as `int`
+ - Symbolic literal: `my_var`, `my_const` or `my_fun` - typed following the
+   bounded value.
 
 ## Lexical environments
 

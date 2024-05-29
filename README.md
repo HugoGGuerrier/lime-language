@@ -11,7 +11,7 @@ Here is a simple example:
 
 ```lime
 fun main() {
-    println("Hello world!")
+    println("Hello world!");
 }
 ```
 
@@ -22,7 +22,7 @@ For example:
 // There is no parameter type annotations or return type, this function is a
 // implicit generic function. It can take arguments of any type if there is a
 // "+" operation defined on those
-fun add(x, y) = x + y
+fun add(x, y) = { x + y }
 
 fun main() {
     // Using the "add" function to add integers
