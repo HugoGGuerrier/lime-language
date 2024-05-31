@@ -21,6 +21,13 @@ repositories {
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     version.set("1.2.1")
     android.set(false)
+    additionalEditorconfig.set(
+        mapOf(
+            "max_line_length" to "100",
+            "end_of_line" to "lf",
+            "insert_final_newline" to "true",
+        ),
+    )
     reporters {
         reporter(
             ReporterType.JSON,
@@ -51,6 +58,13 @@ subprojects {
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         version.set("1.2.1")
         android.set(false)
+        additionalEditorconfig.set(
+            mapOf(
+                "max_line_length" to "100",
+                "end_of_line" to "lf",
+                "insert_final_newline" to "true",
+            ),
+        )
         reporters {
             reporter(
                 ReporterType.JSON,
