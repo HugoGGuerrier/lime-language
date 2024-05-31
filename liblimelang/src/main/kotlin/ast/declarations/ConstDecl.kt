@@ -9,7 +9,7 @@ import com.limelanguage.ast.expressions.Expr
 class ConstDecl(
     unit: AnalysisUnit,
     location: SourceSection,
-    name: Identifier,
+    name: Identifier?,
     type: Identifier?,
-    value: Expr,
+    value: Expr?,
 ) : Decl(unit, location, name, type, value)

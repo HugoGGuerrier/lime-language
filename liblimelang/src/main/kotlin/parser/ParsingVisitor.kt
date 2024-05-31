@@ -6,15 +6,19 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.LimeNode
 import com.limelanguage.ast.Module
-import com.limelanguage.ast.VarAffect
+import com.limelanguage.ast.expressions.VarAffect
 import com.limelanguage.ast.declarations.ConstDecl
 import com.limelanguage.ast.declarations.Decl
 import com.limelanguage.ast.declarations.VarDecl
 import com.limelanguage.ast.declarations.function.FunDecl
-import com.limelanguage.ast.declarations.function.FunParamList
+import com.limelanguage.ast.declarations.function.Param
+import com.limelanguage.ast.declarations.function.ParamList
 import com.limelanguage.ast.expressions.Expr
 import com.limelanguage.ast.expressions.block.BlockElems
 import com.limelanguage.ast.expressions.block.BlockExpr
+import com.limelanguage.ast.expressions.call.Arg
+import com.limelanguage.ast.expressions.call.ArgList
+import com.limelanguage.ast.expressions.call.FunCall
 import com.limelanguage.ast.expressions.literals.IntLiteral
 import com.limelanguage.ast.expressions.literals.SymbolLiteral
 import com.limelanguage.ast.expressions.literals.UnitLiteral
@@ -33,11 +37,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
     /** Create a source section from an ANTLR position object. */
     private fun loc(ctx: ParserRuleContext): SourceSection =
         if (ctx.position != null) {
-            SourceSection(
-                this.unit.source,
-                SourceLocation(ctx.position!!.start.line, ctx.position!!.start.column),
-                SourceLocation(ctx.position!!.end.line, ctx.position!!.end.column),
-            )
+            SourceSection.fromPosition(this.unit.source, ctx.position!!)
         } else {
             SourceSection(
                 this.unit.source,
@@ -87,7 +87,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
 
     override fun visitMultipleModuleElem(ctx: LimeParser.MultipleModuleElemContext): LimeNode? {
         val res: Module = ctx.tail?.accept(this) as Module
-        res.children.add(ctx.head?.accept(this) as Decl)
+        res.children.add(0, ctx.head?.accept(this) as Decl)
         return res
     }
 
@@ -114,7 +114,16 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
     // --- Function call
 
     override fun visitFunCallExpr(ctx: LimeParser.FunCallExprContext): LimeNode? {
-        return super.visitFunCallExpr(ctx)
+        return FunCall(
+            unit,
+            loc(ctx),
+            ctx.callee!!.accept(this) as Expr,
+            ctx.args!!.accept(this) as ArgList,
+        )
+    }
+
+    override fun visitEmptyArg(ctx: LimeParser.EmptyArgContext): LimeNode? {
+        return ArgList(unit, loc(ctx))
     }
 
     // --- Block expression
@@ -137,7 +146,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
 
     override fun visitMultipleBlockElem(ctx: LimeParser.MultipleBlockElemContext): LimeNode? {
         val res = ctx.tail?.accept(this) as BlockElems
-        res.children.add(ctx.head?.accept(this) as Expr)
+        res.children.add(0, ctx.head?.accept(this) as Expr)
         return res
     }
 
@@ -161,9 +170,9 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
         return ConstDecl(
             unit,
             loc(ctx),
-            id(ctx.name)!!,
+            id(ctx.name),
             id(ctx.type),
-            ctx.value?.accept(this) as Expr,
+            ctx.value?.accept(this) as Expr?,
         )
     }
 
@@ -172,9 +181,49 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
             unit,
             loc(ctx),
             id(ctx.name)!!,
-            ctx.params!!.accept(this) as FunParamList,
+            ctx.params!!.accept(this) as ParamList,
             id(ctx.type),
-            ctx.body!!.accept(this) as Expr,
+            ctx.body?.accept(this) as Expr,
         )
+    }
+
+    override fun visitEmptyParam(ctx: LimeParser.EmptyParamContext): LimeNode? {
+        return ParamList(unit, loc(ctx))
+    }
+
+    // --- Parameter
+
+    override fun visitSingleParam(ctx: LimeParser.SingleParamContext): LimeNode? {
+        val res = ParamList(unit, loc(ctx))
+        res.children.add(ctx.param!!.accept(this) as Param)
+        return res
+    }
+
+    override fun visitMultipleParam(ctx: LimeParser.MultipleParamContext): LimeNode? {
+        val res = ctx.tail!!.accept(this) as ParamList
+        res.children.add(0, ctx.head!!.accept(this) as Param)
+        return res
+    }
+
+    override fun visitParam(ctx: LimeParser.ParamContext): LimeNode? {
+        return Param(unit, loc(ctx), id(ctx.name)!!, id(ctx.type)!!)
+    }
+
+    // --- Argument
+
+    override fun visitSingleArg(ctx: LimeParser.SingleArgContext): LimeNode? {
+        val res = ArgList(unit, loc(ctx))
+        res.children.add(ctx.arg!!.accept(this) as Arg)
+        return res
+    }
+
+    override fun visitMultipleArg(ctx: LimeParser.MultipleArgContext): LimeNode? {
+        val res = ctx.tail?.accept(this) as ArgList
+        res.children.add(0, ctx.head!!.accept(this) as Arg)
+        return res
+    }
+
+    override fun visitArg(ctx: LimeParser.ArgContext): LimeNode? {
+        return Arg(unit, loc(ctx), ctx.value!!.accept(this) as Expr)
     }
 }

@@ -24,7 +24,9 @@ FUN : 'fun' ;
 ID : [a-zA-Z_][a-zA-A_0-9]* ;
 INT : [+\-]?[0-9]+ ;
 
-IGNORED_ : [ \t\r\n]+ -> skip;
+IGNORED : [ \t\r\n]+ -> skip ;
+LINE_COMMENT : '//' ~('\n'|'\r')* '\r'? '\n' -> channel(1) ;
+MULTI_COMMENT : '/*' .*? '*/' -> channel(1) ;
 
 // --- Parsing
 
@@ -42,14 +44,14 @@ module_elem: const_decl | fun_decl ;
 // Declarations/Affectations
 var_decl: LET name=ID (COLON type=ID)? (EQ value=expr)? # VarDecl ;
 var_affect: name=ID EQ value=expr # VarAffect ;
-const_decl: CONST name=ID (COLON type=ID)? EQ value=expr? # ConstDecl ;
-fun_decl: FUN name=ID L_PAREN params=fun_params R_PAREN (ARROW type=ID)? body=block_expr # FunDecl ;
+const_decl: CONST name=ID (COLON type=ID)? EQ value=expr # ConstDecl ;
+fun_decl: FUN name=ID L_PAREN params=parameters R_PAREN (ARROW type=ID)? body=block_expr # FunDecl ;
 
 // Expressions
 expr:
      literal # LiteralExpr
     | L_PAREN inner=expr R_PAREN # BracketExpr
-    | callee=expr L_PAREN args=fun_args R_PAREN # FunCallExpr
+    | callee=expr L_PAREN args=arguments R_PAREN # FunCallExpr
     | block_expr # BlockExpr
     | var_decl # VarDeclExpr
     | var_affect # VarAffectExpr
@@ -73,15 +75,16 @@ literal:
     ;
 
 // Function parameters and arguments
-fun_params:
-    # EmptyFunParam
-    | param=fun_param COMMA? # SingleFunParam
-    | head=fun_param COMMA tail=fun_params # MultipleFunParam
+parameters:
+    # EmptyParam
+    | param=parameter COMMA? # SingleParam
+    | head=parameter COMMA tail=parameters # MultipleParam
     ;
-fun_param: name=ID COLON type=ID # FunParam ;
+parameter: name=ID COLON type=ID # Param ;
 
-fun_args:
-    # EmptyFunArg
-    | arg=expr COMMA? # SingleFunArg
-    | head=expr COMMA tail=fun_args # MultipleFunArg
+arguments:
+    # EmptyArg
+    | arg=argument COMMA? # SingleArg
+    | head=argument COMMA tail=arguments # MultipleArg
     ;
+argument: value=expr # Arg ;

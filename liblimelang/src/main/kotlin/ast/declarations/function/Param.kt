@@ -6,7 +6,7 @@ import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.declarations.Decl
 
 /** This class represents a function parameter in the Lime language. */
-class FunParam(
+class Param(
     unit: AnalysisUnit,
     location: SourceSection,
     name: Identifier,

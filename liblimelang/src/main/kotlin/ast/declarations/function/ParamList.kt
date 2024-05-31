@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.LimeListNode
 
 /** This class represents a list of parameter in a function declaration in the Lime language. */
-class FunParamList(
+class ParamList(
     unit: AnalysisUnit,
     location: SourceSection,
-) : LimeListNode<FunParam>(unit, location)
+) : LimeListNode<Param>(unit, location)

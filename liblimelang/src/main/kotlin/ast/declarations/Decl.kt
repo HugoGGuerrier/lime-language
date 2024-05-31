@@ -17,7 +17,7 @@ import com.limelanguage.ast.expressions.Expr
 abstract class Decl(
     unit: AnalysisUnit,
     location: SourceSection,
-    val name: Identifier,
+    val name: Identifier?,
     val type: Identifier?,
     val value: Expr?,
 ) : Expr(unit, location)
