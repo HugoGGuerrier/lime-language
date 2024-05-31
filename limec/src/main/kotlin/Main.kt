@@ -1,5 +1,12 @@
 package com.limelanguage
 
+import com.limelanguage.analysis.AnalysisContext
+
 fun main() {
-    println("Hello!")
+    val context = AnalysisContext()
+    val unit = context.analyseBuffer("test", "const x =")
+    if (unit.diagnostics.isNotEmpty()) {
+        println(unit.diagnostics)
+    }
+    println(unit.root)
 }
