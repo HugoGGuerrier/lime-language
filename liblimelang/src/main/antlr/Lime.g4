@@ -16,9 +16,13 @@ EQ : '=' ;
 UNIT : '()' ;
 
 // Keywords
+TRUE : 'true' ;
+FALSE : 'false' ;
+IF : 'if' ;
+ELSE : 'else' ;
+FUN : 'fun' ;
 CONST : 'const' ;
 LET : 'let' ;
-FUN : 'fun' ;
 
 // Symbols
 ID : [a-zA-Z_][a-zA-A_0-9]* ;
@@ -42,17 +46,18 @@ module_elems:
 module_elem: const_decl | fun_decl ;
 
 // Declarations/Affectations
+fun_decl: FUN name=ID L_PAREN params=parameters R_PAREN (ARROW type=ID)? body=block_expr # FunDecl ;
+const_decl: CONST name=ID (COLON type=ID)? EQ value=expr # ConstDecl ;
 var_decl: LET name=ID (COLON type=ID)? (EQ value=expr)? # VarDecl ;
 var_affect: name=ID EQ value=expr # VarAffect ;
-const_decl: CONST name=ID (COLON type=ID)? EQ value=expr # ConstDecl ;
-fun_decl: FUN name=ID L_PAREN params=parameters R_PAREN (ARROW type=ID)? body=block_expr # FunDecl ;
 
 // Expressions
 expr:
-     literal # LiteralExpr
+      literal # LiteralExpr
     | L_PAREN inner=expr R_PAREN # BracketExpr
-    | callee=expr L_PAREN args=arguments R_PAREN # FunCallExpr
     | block_expr # BlockExpr
+    | callee=expr L_PAREN args=arguments R_PAREN # FunCallExpr
+    | cond_expr # ConditionalExpr
     | var_decl # VarDeclExpr
     | var_affect # VarAffectExpr
     | const_decl # ConstDeclExpr
@@ -64,12 +69,23 @@ block_expr: L_CURL elems=block_elems R_CURL # Block ;
 block_elems:
     # EmptyBlockElem
     | elem=expr SEMI_COLON? # SingleBlockElem
-    | head=expr SEMI_COLON tail=block_elems # MultipleBlockElem
+    | head=block_elem tail=block_elems # MultipleBlockElem
     ;
+block_elem:
+      block_expr SEMI_COLON?
+    | cond_expr SEMI_COLON?
+    | fun_decl SEMI_COLON?
+    | expr SEMI_COLON
+    ;
+
+// Conditional expression
+cond_expr: IF condition=expr thenExpr=block_expr (ELSE elseExpr=block_expr)? # Conditional ;
 
 // Literals
 literal:
       UNIT # UnitLiteral
+    | TRUE # TrueBooleanLiteral
+    | FALSE # FalseBooleanLiteral
     | value=INT # IntLiteral
     | id=ID # SymbolLiteral
     ;

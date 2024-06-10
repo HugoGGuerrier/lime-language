@@ -141,9 +141,9 @@ fun main() {
 ```
 
 Unlike constants, variables are mutable, so it is possible to change their
-value after its declaration. It is also possible to declare a variable without
-any value and defer its initialization. In that case, you MUST provide a type
-annotation to the variable.
+value after their declaration. It is also possible to declare a variable 
+without any value and defer its initialization. In that case, you **MUST** 
+provide a type annotation to the variable.
 
 ```lime
 fun main {
@@ -160,6 +160,27 @@ fun main {
 
 In the Lime language quite all syntax constructs are expressions then can be
 typed and have a value.
+
+### Literals
+
+Lime allows you to express literal values of many type. While this list will
+change in the future, here are the possible literals:
+- Unit literal: `()` - typed as `unit`
+- Boolean literal: `true` or `false` - typed as `bool`
+- Integer literal: `1`, `42` or `-90` - typed as `int`
+- Symbolic literal: `my_var`, `my_const` or `my_fun` - typed following the
+  bounded value.
+
+### Bracketed expression
+
+You can surround any expression with brackets to increase its precedence.
+Example:
+
+```lime
+const x = (1 - 1) * (2 + 2)
+// Is not the same as
+const y = 1 - 1 * 2 + 2
+```
 
 ### Block-Expression
 
@@ -183,6 +204,11 @@ const y = {
 }
 ```
 
+Some constructs in block expressions don't need to end with a semicolon:
+ - Function declarations
+ - Nested block expressions
+ - Conditional expressions (`if ... else ...`)
+
 ### Function calls
 
 You can call a function as in any other language, with some parentheses. A
@@ -203,7 +229,7 @@ be valid).
 ```lime
 // This function returns the "add" function
 fun get_add() {
-    fun add(x: int, y: int) { x + y };
+    fun add(x: int, y: int) { x + y }
     add
 }
 
@@ -211,14 +237,22 @@ fun get_add() {
 const added = get_add()(40, 2)
 ```
 
-### Literals
+### Conditional expression
 
-Lime allows you to express literal values of many type. While this list will
-change in the future, here are the possible literals:
- - Unit literal: `()` - typed as `unit`
- - Integer literal: `1`, `42` or `-90` - typed as `int`
- - Symbolic literal: `my_var`, `my_const` or `my_fun` - typed following the
-   bounded value.
+You can express a conditional expression with the `if` and `else` keywords.
+Example:
+
+```lime
+fun main() {
+    let x = if my_condition { 1 } else { 2 };
+    if x == 0 {
+        println("Hello!");
+    } else {
+        println("World!");
+    }
+    println("The end");
+}
+```
 
 ## Lexical environments
 

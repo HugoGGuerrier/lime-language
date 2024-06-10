@@ -51,7 +51,7 @@ class AnalysisUnit(val source: Source) {
     /** Add a diagnostic to this analysis unit from an exception. */
     fun addDiagnostic(exception: Exception) {
         this.diagnostics.add(
-            Diagnostic(exception.message ?: exception.toString())
+            Diagnostic(exception.message ?: exception.toString()),
         )
     }
 }
