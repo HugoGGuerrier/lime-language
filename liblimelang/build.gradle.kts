@@ -31,11 +31,14 @@ kotlin {
 
 // Project dependencies
 dependencies {
-    testImplementation(kotlin("test"))
     implementation("com.strumenta:antlr-kotlin-runtime:1.0.0-RC3")
+
+    testImplementation(kotlin("test"))
+    testImplementation("io.github.java-diff-utils:java-diff-utils:4.12")
 }
 
 tasks.test {
+    systemProperty("tests.rewriteBaselines", project.properties.getOrDefault("rewrite", "false")!!)
     useJUnitPlatform()
 }
 

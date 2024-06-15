@@ -23,7 +23,6 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     android.set(false)
     additionalEditorconfig.set(
         mapOf(
-            "max_line_length" to "100",
             "end_of_line" to "lf",
             "insert_final_newline" to "true",
         ),
@@ -60,7 +59,6 @@ subprojects {
         android.set(false)
         additionalEditorconfig.set(
             mapOf(
-                "max_line_length" to "100",
                 "end_of_line" to "lf",
                 "insert_final_newline" to "true",
             ),
