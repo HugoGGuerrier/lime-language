@@ -2,6 +2,7 @@ package com.limelanguage.ast.expressions.block
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 
 /**
@@ -11,5 +12,5 @@ import com.limelanguage.ast.expressions.Expr
 class BlockExpr(
     unit: AnalysisUnit,
     location: SourceSection,
-    val elems: BlockElems,
+    @Child val elems: BlockElems,
 ) : Expr(unit, location)

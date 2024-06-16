@@ -2,6 +2,7 @@ package com.limelanguage.ast.expressions.literals
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 import java.math.BigInteger
 
@@ -9,5 +10,5 @@ import java.math.BigInteger
 class IntLiteral(
     unit: AnalysisUnit,
     location: SourceSection,
-    val value: BigInteger,
+    @Child val value: BigInteger,
 ) : Expr(unit, location)

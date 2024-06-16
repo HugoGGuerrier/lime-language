@@ -2,6 +2,7 @@ package com.limelanguage.ast.expressions.call
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 
 /**
@@ -11,6 +12,6 @@ import com.limelanguage.ast.expressions.Expr
 class FunCall(
     unit: AnalysisUnit,
     location: SourceSection,
-    val callee: Expr,
-    val args: ArgList,
+    @Child val callee: Expr,
+    @Child val args: ArgList,
 ) : Expr(unit, location)

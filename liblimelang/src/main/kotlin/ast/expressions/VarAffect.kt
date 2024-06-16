@@ -2,6 +2,7 @@ package com.limelanguage.ast.expressions
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.ast.Child
 import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.LimeNode
 
@@ -9,6 +10,6 @@ import com.limelanguage.ast.LimeNode
 class VarAffect(
     unit: AnalysisUnit,
     location: SourceSection,
-    val name: Identifier,
-    val value: Expr,
+    @Child val name: Identifier,
+    @Child val value: Expr,
 ) : LimeNode(unit, location)

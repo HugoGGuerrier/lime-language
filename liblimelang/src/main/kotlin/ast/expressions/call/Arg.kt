@@ -2,6 +2,7 @@ package com.limelanguage.ast.expressions.call
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.ast.Child
 import com.limelanguage.ast.LimeNode
 import com.limelanguage.ast.expressions.Expr
 
@@ -12,5 +13,5 @@ import com.limelanguage.ast.expressions.Expr
 class Arg(
     unit: AnalysisUnit,
     location: SourceSection,
-    val value: Expr,
+    @Child val value: Expr,
 ) : LimeNode(unit, location)

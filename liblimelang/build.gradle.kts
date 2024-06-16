@@ -31,6 +31,7 @@ kotlin {
 
 // Project dependencies
 dependencies {
+    implementation(kotlin("reflect"))
     implementation("com.strumenta:antlr-kotlin-runtime:1.0.0-RC3")
 
     testImplementation(kotlin("test"))

@@ -2,6 +2,7 @@ package com.limelanguage.ast.declarations
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.ast.Child
 import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.expressions.Expr
 
@@ -17,7 +18,7 @@ import com.limelanguage.ast.expressions.Expr
 abstract class Decl(
     unit: AnalysisUnit,
     location: SourceSection,
-    val name: Identifier?,
-    val type: Identifier?,
-    val value: Expr?,
+    @Child val name: Identifier?,
+    @Child val type: Identifier?,
+    @Child val value: Expr?,
 ) : Expr(unit, location)

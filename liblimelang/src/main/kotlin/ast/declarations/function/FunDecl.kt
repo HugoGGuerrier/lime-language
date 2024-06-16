@@ -2,6 +2,7 @@ package com.limelanguage.ast.declarations.function
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.ast.Child
 import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.declarations.Decl
 import com.limelanguage.ast.expressions.Expr
@@ -11,7 +12,7 @@ class FunDecl(
     unit: AnalysisUnit,
     location: SourceSection,
     name: Identifier,
-    val params: ParamList,
+    @Child val params: ParamList,
     returnType: Identifier?,
     value: Expr,
 ) : Decl(unit, location, name, returnType, value)

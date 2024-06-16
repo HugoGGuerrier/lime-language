@@ -11,5 +11,5 @@ import com.limelanguage.analysis.AnalysisUnit
 class Identifier(
     unit: AnalysisUnit,
     location: SourceSection,
-    val text: String,
+    @Child val text: String,
 ) : LimeNode(unit, location)
