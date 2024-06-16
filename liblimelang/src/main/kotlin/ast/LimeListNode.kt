@@ -15,13 +15,18 @@ abstract class LimeListNode<T : LimeNode>(
     // ----- Methods -----
 
     override fun treeString(indentLevel: Int): String {
-        val res = StringBuilder(this::class.simpleName).appendLine(" (list node)")
-        for ((i, child) in children.withIndex()) {
-            res.append(indentString(indentLevel + 1))
-                .append("<$i>: ")
-                .append(child.treeString(indentLevel + 1))
-            if (i < children.size - 1) {
-                res.appendLine()
+        val res = StringBuilder(this::class.simpleName).append(" (list node)")
+        if (children.isEmpty()) {
+            res.append(" <EMPTY>")
+        } else {
+            res.appendLine()
+            for ((i, child) in children.withIndex()) {
+                res.append(indentString(indentLevel + 1))
+                    .append("<$i>: ")
+                    .append(child.treeString(indentLevel + 1))
+                if (i < children.size - 1) {
+                    res.appendLine()
+                }
             }
         }
         return res.toString()
