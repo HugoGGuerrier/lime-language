@@ -33,25 +33,26 @@ class AnalysisUnit(val source: Source) {
         parser.errorHandler = ErrorStrategy(this)
 
         // Parse the lime source and visit its parsing tree to create the AST
-        try {
-            val sourceModuleContext = parser.file_module()
+        return try {
+            val sourceModuleContext = parser.compilation_unit()
             val visitor = ParsingVisitor(this)
-            return sourceModuleContext.accept(visitor)
+            sourceModuleContext.accept(visitor)
         } catch (e: Exception) {
+            e.printStackTrace()
             addDiagnostic(e)
-            return null
+            null
         }
     }
 
     /** Add a diagnostic to this analysis unit. */
     fun addDiagnostic(diagnostic: Diagnostic) {
-        this.diagnostics.add(diagnostic)
+        diagnostics.add(diagnostic)
     }
 
     /** Add a diagnostic to this analysis unit from an exception. */
     fun addDiagnostic(exception: Exception) {
-        this.diagnostics.add(
-            Diagnostic(exception.message ?: exception.toString()),
+        diagnostics.add(
+            Diagnostic(exception.message ?: exception.stackTraceToString()),
         )
     }
 }

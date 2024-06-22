@@ -12,7 +12,7 @@ class FunDecl(
     unit: AnalysisUnit,
     location: SourceSection,
     name: Identifier,
-    @Child val params: ParamList,
+    @Child(1) val params: ParamList?,
     returnType: Identifier?,
     value: Expr,
 ) : Decl(unit, location, name, returnType, value)

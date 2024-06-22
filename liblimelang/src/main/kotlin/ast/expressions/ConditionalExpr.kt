@@ -8,7 +8,7 @@ import com.limelanguage.ast.Child
 class ConditionalExpr(
     unit: AnalysisUnit,
     location: SourceSection,
-    @Child val condition: Expr,
-    @Child val thenExpr: Expr,
-    @Child val elseExpr: Expr?,
+    @Child(0) val condition: Expr,
+    @Child(1) val thenExpr: Expr,
+    @Child(2) val elseExpr: Expr?,
 ) : Expr(unit, location)

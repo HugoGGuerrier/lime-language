@@ -20,7 +20,7 @@ data class Source(val identifier: SourceId, val content: String) {
      * it for whatever purpose
      */
     val sourceFile: File? by lazy {
-        val file = File(this.identifier)
+        val file = File(identifier)
         if (file.exists() && file.isFile) {
             file
         } else {
@@ -31,7 +31,7 @@ data class Source(val identifier: SourceId, val content: String) {
     // ----- Methods -----
 
     /** Get the lines from the source content. */
-    fun getLines(): List<String> = this.content.lines()
+    fun getLines(): List<String> = content.lines()
 
     /**
      * Get the wanted lines from the source content.
@@ -42,15 +42,15 @@ data class Source(val identifier: SourceId, val content: String) {
     fun getLines(
         start: Int,
         n: Int,
-    ): List<String> = this.getLines().subList(start - 1, start - 1 + n)
+    ): List<String> = getLines().subList(start - 1, start - 1 + n)
 
     // ----- Overrides -----
 
-    override fun hashCode(): Int = this.identifier.hashCode()
+    override fun hashCode(): Int = identifier.hashCode()
 
     override fun equals(other: Any?): Boolean =
         when (other) {
-            is Source -> this.identifier == other.identifier
+            is Source -> identifier == other.identifier
             else -> false
         }
 }

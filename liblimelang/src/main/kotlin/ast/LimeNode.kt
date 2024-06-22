@@ -2,6 +2,7 @@ package com.limelanguage.ast
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberProperties
 
@@ -36,8 +37,16 @@ abstract class LimeNode(val unit: AnalysisUnit, val location: SourceSection) {
 
         // Prepare the result and get the children to display
         val res = StringBuilder(this::class.simpleName)
-        val children = this::class.memberProperties.filter { p -> p.hasAnnotation<Child>() }
+        val children =
+            this::class.memberProperties
+                .filter { it.hasAnnotation<Child>() }
+                .sortedBy { it.findAnnotation<Child>()!!.index }
         val childrenValue = children.map { c -> c.call(this) }
+
+        // If the node hasn't any child, just return the return as it is
+        if (children.isEmpty()) {
+            return res.toString()
+        }
 
         // If the node only has one child, display it on the same line. Else, display the whole tree
         if (children.size == 1 && childrenValue[0] !is LimeNode) {
@@ -61,4 +70,4 @@ abstract class LimeNode(val unit: AnalysisUnit, val location: SourceSection) {
 /** This annotation is used to introspect Lime AST trees and discriminate children members. */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.PROPERTY)
-annotation class Child
+annotation class Child(val index: Int = 0)

@@ -13,7 +13,6 @@ ARROW : '->' ;
 COLON : ':' ;
 SEMI_COLON : ';' ;
 EQ : '=' ;
-UNIT : '()' ;
 
 // Keywords
 TRUE : 'true' ;
@@ -34,15 +33,11 @@ MULTI_COMMENT : '/*' .*? '*/' -> channel(1) ;
 
 // --- Parsing
 
-// File top-level module
-file_module: module_elems EOF # FileModule ;
+// File top-level compilation unit
+compilation_unit: module_elems EOF # CompilationUnit ;
 
 // Generic module parsing
-module_elems:
-    # EmptyModuleElem
-    | elem=module_elem # SingleModuleElem
-    | head=module_elem tail=module_elems # MultipleModuleElem
-    ;
+module_elems: module_elem* # ModuleElems ;
 module_elem: const_decl | fun_decl ;
 
 // Declarations/Affectations
@@ -66,24 +61,15 @@ expr:
 
 // Block expression
 block_expr: L_CURL elems=block_elems R_CURL # Block ;
-block_elems:
-    # EmptyBlockElem
-    | elem=expr SEMI_COLON? # SingleBlockElem
-    | head=block_elem tail=block_elems # MultipleBlockElem
-    ;
-block_elem:
-      block_expr SEMI_COLON?
-    | cond_expr SEMI_COLON?
-    | fun_decl SEMI_COLON?
-    | expr SEMI_COLON
-    ;
+block_elems: (block_elem SEMI_COLON? | expr SEMI_COLON)* expr SEMI_COLON? # BlockElems ;
+block_elem: (block_expr | cond_expr | fun_decl);
 
 // Conditional expression
 cond_expr: IF condition=expr thenExpr=block_expr (ELSE elseExpr=block_expr)? # Conditional ;
 
 // Literals
 literal:
-      UNIT # UnitLiteral
+      L_PAREN R_PAREN # UnitLiteral
     | TRUE # TrueBooleanLiteral
     | FALSE # FalseBooleanLiteral
     | value=INT # IntLiteral
@@ -91,16 +77,8 @@ literal:
     ;
 
 // Function parameters and arguments
-parameters:
-    # EmptyParam
-    | param=parameter COMMA? # SingleParam
-    | head=parameter COMMA tail=parameters # MultipleParam
-    ;
+parameters: (parameter COMMA)* (parameter COMMA?)? # Params ;
 parameter: name=ID COLON type=ID # Param ;
 
-arguments:
-    # EmptyArg
-    | arg=argument COMMA? # SingleArg
-    | head=argument COMMA tail=arguments # MultipleArg
-    ;
+arguments: (argument COMMA)* (argument COMMA?)? # Args ;
 argument: value=expr # Arg ;

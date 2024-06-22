@@ -26,6 +26,8 @@ import com.limelanguage.ast.expressions.literals.SymbolLiteral
 import com.limelanguage.ast.expressions.literals.UnitLiteral
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.Token
+import org.antlr.v4.kotlinruntime.ast.Position
+import org.antlr.v4.kotlinruntime.tree.TerminalNode
 
 /**
  * This visitor translates visited Lime syntactic construct into AST nodes. This visitor should be
@@ -34,70 +36,19 @@ import org.antlr.v4.kotlinruntime.Token
  * @property unit The unit to translate nodes for.
  */
 class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
-    // ----- Utils methods -----
-
-    /** Create a source section from an ANTLR parsing context. */
-    private fun loc(ctx: ParserRuleContext): SourceSection =
-        if (ctx.position != null) {
-            SourceSection.fromPosition(this.unit.source, ctx.position!!)
-        } else {
-            SourceSection(
-                this.unit.source,
-                SourceLocation.FIRST,
-                SourceLocation.FIRST,
-            )
-        }
-
-    /** Until function to create a source section from a lexed token. */
-    private fun loc(token: Token): SourceSection =
-        SourceSection(
-            this.unit.source,
-            SourceLocation.fromPoint(token.startPoint()),
-            SourceLocation.fromPoint(token.endPoint() ?: token.startPoint()),
-        )
-
-    /** Synthetize a new identifier node from an ANTLR token. */
-    private fun id(token: Token?): Identifier? {
-        if (token == null) {
-            return null
-        } else {
-            val text = token.text!!
-            val startPoint = token.startPoint()
-            return Identifier(
-                unit,
-                SourceSection(
-                    unit.source,
-                    SourceLocation(startPoint.line, startPoint.column),
-                    SourceLocation(startPoint.line, startPoint.column + text.length),
-                ),
-                text,
-            )
-        }
-    }
-
     // ----- Visiting methods -----
 
     // --- File top-level
 
-    override fun visitFileModule(ctx: LimeParser.FileModuleContext): LimeNode? {
+    override fun visitCompilationUnit(ctx: LimeParser.CompilationUnitContext): LimeNode? {
         return ctx.module_elems().accept(this)
     }
 
     // --- Module
 
-    override fun visitEmptyModuleElem(ctx: LimeParser.EmptyModuleElemContext): LimeNode? {
-        return Module(unit, loc(ctx))
-    }
-
-    override fun visitSingleModuleElem(ctx: LimeParser.SingleModuleElemContext): LimeNode? {
+    override fun visitModuleElems(ctx: LimeParser.ModuleElemsContext): LimeNode? {
         val res = Module(unit, loc(ctx))
-        res.children.add(ctx.elem!!.accept(this) as Decl)
-        return res
-    }
-
-    override fun visitMultipleModuleElem(ctx: LimeParser.MultipleModuleElemContext): LimeNode? {
-        val res: Module = ctx.tail!!.accept(this) as Module
-        res.children.add(0, ctx.head!!.accept(this) as Decl)
+        ctx.module_elem().forEach { res.children.add(it.accept(this) as Decl) }
         return res
     }
 
@@ -132,7 +83,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
             unit,
             loc(ctx),
             id(ctx.name)!!,
-            ctx.params!!.accept(this) as ParamList,
+            ctx.params?.accept(this) as? ParamList,
             id(ctx.type),
             ctx.body!!.accept(this) as Expr,
         )
@@ -172,26 +123,15 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
         return BlockExpr(unit, loc(ctx), ctx.elems!!.accept(this) as BlockElems)
     }
 
-    override fun visitEmptyBlockElem(ctx: LimeParser.EmptyBlockElemContext): LimeNode? {
+    override fun visitBlockElems(ctx: LimeParser.BlockElemsContext): LimeNode? {
         val res = BlockElems(unit, loc(ctx))
-        res.children.add(UnitLiteral(unit, loc(ctx)))
-        return res
-    }
-
-    override fun visitSingleBlockElem(ctx: LimeParser.SingleBlockElemContext): LimeNode? {
-        val res = BlockElems(unit, loc(ctx))
-        res.children.add(ctx.elem!!.accept(this) as Expr)
-
-        // Un-sugar the implicit unit valued block
-        if (ctx.SEMI_COLON() != null) {
-            res.children.add(UnitLiteral(unit, loc(ctx.SEMI_COLON()!!.symbol)))
+        ctx.children!!
+            .filterIsInstance<ParserRuleContext>()
+            .forEach { res.children.add(it.accept(this) as Expr) }
+        val lastChild = ctx.getChild(ctx.childCount - 1)!!
+        if (lastChild is TerminalNode && lastChild.symbol.type == LimeLexer.Tokens.SEMI_COLON) {
+            res.children.add(UnitLiteral(unit, loc(lastChild.symbol)))
         }
-        return res
-    }
-
-    override fun visitMultipleBlockElem(ctx: LimeParser.MultipleBlockElemContext): LimeNode? {
-        val res = ctx.tail!!.accept(this) as BlockElems
-        res.children.add(0, ctx.head!!.accept(this) as Expr)
         return res
     }
 
@@ -204,10 +144,6 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
             ctx.callee!!.accept(this) as Expr,
             ctx.args!!.accept(this) as ArgList,
         )
-    }
-
-    override fun visitEmptyArg(ctx: LimeParser.EmptyArgContext): LimeNode? {
-        return ArgList(unit, loc(ctx))
     }
 
     // --- Conditional expression
@@ -224,19 +160,9 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
 
     // --- Parameter
 
-    override fun visitEmptyParam(ctx: LimeParser.EmptyParamContext): LimeNode? {
-        return ParamList(unit, loc(ctx))
-    }
-
-    override fun visitSingleParam(ctx: LimeParser.SingleParamContext): LimeNode? {
+    override fun visitParams(ctx: LimeParser.ParamsContext): LimeNode? {
         val res = ParamList(unit, loc(ctx))
-        res.children.add(ctx.param!!.accept(this) as Param)
-        return res
-    }
-
-    override fun visitMultipleParam(ctx: LimeParser.MultipleParamContext): LimeNode? {
-        val res = ctx.tail!!.accept(this) as ParamList
-        res.children.add(0, ctx.head!!.accept(this) as Param)
+        ctx.parameter().forEach { res.children.add(it.accept(this) as Param) }
         return res
     }
 
@@ -246,19 +172,42 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
 
     // --- Argument
 
-    override fun visitSingleArg(ctx: LimeParser.SingleArgContext): LimeNode? {
+    override fun visitArgs(ctx: LimeParser.ArgsContext): LimeNode? {
         val res = ArgList(unit, loc(ctx))
-        res.children.add(ctx.arg!!.accept(this) as Arg)
-        return res
-    }
-
-    override fun visitMultipleArg(ctx: LimeParser.MultipleArgContext): LimeNode? {
-        val res = ctx.tail!!.accept(this) as ArgList
-        res.children.add(0, ctx.head!!.accept(this) as Arg)
+        ctx.argument().forEach { res.children.add(it.accept(this) as Arg) }
         return res
     }
 
     override fun visitArg(ctx: LimeParser.ArgContext): LimeNode? {
         return Arg(unit, loc(ctx), ctx.value!!.accept(this) as Expr)
+    }
+
+    // ----- Utils methods -----
+
+    /** Create a source section from an ANTLR parsing context. */
+    private fun loc(ctx: ParserRuleContext): SourceSection {
+        val startTok = ctx.start
+        val stopTok = ctx.stop
+        return when {
+            startTok is Token && stopTok is Token -> SourceSection.fromTokens(unit.source, startTok, stopTok)
+            ctx.position is Position -> SourceSection.fromPosition(unit.source, ctx.position!!)
+            else -> SourceSection(unit.source, SourceLocation.FIRST, SourceLocation.FIRST)
+        }
+    }
+
+    /** Until function to create a source section from a lexed token. */
+    private fun loc(token: Token): SourceSection = SourceSection.fromToken(unit.source, token)
+
+    /** Synthetize a new identifier node from an ANTLR token. */
+    private fun id(token: Token?): Identifier? {
+        if (token == null) {
+            return null
+        } else {
+            return Identifier(
+                unit,
+                SourceSection.fromToken(unit.source, token),
+                token.text ?: "",
+            )
+        }
     }
 }

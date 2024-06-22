@@ -52,13 +52,13 @@ class AnalysisContext(val charset: Charset = Charsets.UTF_8) {
         val source = Source(bufferName, bufferContent)
 
         // Get the already analysed source if not reparse is necessary
-        if (this.units.containsKey(source) && !reparse) {
+        if (units.containsKey(source) && !reparse) {
             return this.units[source]!!
         }
 
         // Else, analyse the source and place it in the cache
         val unit = AnalysisUnit(source)
-        this.units[source] = unit
+        units[source] = unit
         return unit
     }
 }

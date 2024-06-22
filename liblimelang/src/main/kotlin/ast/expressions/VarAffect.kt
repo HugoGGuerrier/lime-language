@@ -10,6 +10,6 @@ import com.limelanguage.ast.LimeNode
 class VarAffect(
     unit: AnalysisUnit,
     location: SourceSection,
-    @Child val name: Identifier,
-    @Child val value: Expr,
+    @Child(0) val name: Identifier,
+    @Child(1) val value: Expr,
 ) : LimeNode(unit, location)

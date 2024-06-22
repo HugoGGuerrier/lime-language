@@ -1,8 +1,5 @@
 package com.limelanguage
 
-import org.antlr.v4.kotlinruntime.ast.Point
-import org.antlr.v4.kotlinruntime.ast.Position
-
 /**
  * This class represents a specific section from a source.
  *
@@ -11,18 +8,7 @@ import org.antlr.v4.kotlinruntime.ast.Position
  * @property end End of the section.
  */
 data class SourceSection(val source: Source, val start: SourceLocation, val end: SourceLocation) {
-    companion object {
-        /** Create a new source location from an ANTLR [position] with [source]. */
-        fun fromPosition(
-            source: Source,
-            position: Position,
-        ): SourceSection =
-            SourceSection(
-                source,
-                SourceLocation.fromPoint(position.start),
-                SourceLocation.fromPoint(position.end),
-            )
-    }
+    companion object
 
     // ----- Methods -----
 
@@ -34,7 +20,5 @@ data class SourceSection(val source: Source, val start: SourceLocation, val end:
 data class SourceLocation(val line: Int, val column: Int) {
     companion object {
         val FIRST: SourceLocation = SourceLocation(1, 0)
-
-        fun fromPoint(point: Point) = SourceLocation(point.line, point.column)
     }
 }
