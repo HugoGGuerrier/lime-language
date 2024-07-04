@@ -3,9 +3,10 @@ package com.limelanguage.analysis
 import com.limelanguage.Diagnostic
 import com.limelanguage.Source
 import com.limelanguage.ast.LimeNode
-import com.limelanguage.parser.ErrorStrategy
+import com.limelanguage.parser.LexingErrorListener
 import com.limelanguage.parser.LimeLexer
 import com.limelanguage.parser.LimeParser
+import com.limelanguage.parser.ParsingErrorStrategy
 import com.limelanguage.parser.ParsingVisitor
 import org.antlr.v4.kotlinruntime.CharStreams
 import org.antlr.v4.kotlinruntime.CommonTokenStream
@@ -29,8 +30,10 @@ class AnalysisUnit(val source: Source) {
     private fun parseLimeSource(): LimeNode? {
         // Create lexer and parser
         val lexer = LimeLexer(CharStreams.fromString(source.content))
+        lexer.removeErrorListeners()
+        lexer.addErrorListener(LexingErrorListener(this))
         val parser = LimeParser(CommonTokenStream(lexer))
-        parser.errorHandler = ErrorStrategy(this)
+        parser.errorHandler = ParsingErrorStrategy(this)
 
         // Parse the lime source and visit its parsing tree to create the AST
         return try {

@@ -1,0 +1,93 @@
+==========
+fun main() { var x = 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: VarDecl
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: None
+|  |  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun main() { var x }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: VarDecl
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: None
+|  |  |  |  value: None
+
+==========
+fun main() { var x: int = 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: VarDecl
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun main() { var = 0 }
+==========
+=== Expected parsing error(s):
+Cannot process token: '='; stop parsing 
+at 1:17
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: UnitLiteral
+
+==========
+fun main() { var }
+==========
+=== Expected parsing error(s):
+Cannot process token: '}'; stop parsing 
+at 1:17
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: UnitLiteral
+
+==========
+fun main() { var x = }
+==========
+=== Expected parsing error(s):
+Cannot process token: '}'; stop parsing 
+at 1:21
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: UnitLiteral
+

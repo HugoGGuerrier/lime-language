@@ -14,8 +14,14 @@ dependencies {
     // Dependency on the Lime frontend library
     implementation(project(":liblimelang"))
 
+    // Mordant, an output styling library
+    implementation("com.github.ajalt.mordant:mordant:2.6.0")
+    implementation("com.github.ajalt.mordant:mordant-coroutines:2.6.0")
+
     // Test dependencies
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 // Define the main class of the Lime compilers

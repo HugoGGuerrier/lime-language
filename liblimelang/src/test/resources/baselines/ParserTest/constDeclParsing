@@ -1,0 +1,57 @@
+==========
+const x = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x: int = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: Identifier { text: int }
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const = 0
+==========
+=== Expected parsing error(s):
+Missing <IDENTIFIER> (got '=' instead) 
+at 1:6
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: <PARSING_ERROR>
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x
+==========
+=== Expected parsing error(s):
+Unexpected input: <EOF>; expecting { ':', '=' } 
+at 1:7
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: <PARSING_ERROR>
+
+==========
+const x: = 0
+==========
+=== Expected parsing error(s):
+Missing <IDENTIFIER> (got '=' instead) 
+at 1:9
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+

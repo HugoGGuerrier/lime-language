@@ -1,0 +1,147 @@
+==========
+const x = ()
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: UnitLiteral
+
+==========
+const x = (      )
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: UnitLiteral
+
+==========
+const x = (
+==========
+=== Expected parsing error(s):
+Cannot process token: <EOF>; stop parsing 
+at 1:11
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: <PARSING_ERROR>
+
+==========
+const x = true
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BooleanLiteral { value: true }
+
+==========
+const x = false
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BooleanLiteral { value: false }
+
+==========
+const x = 1
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 1 }
+
+==========
+const x = +10000000000000000000000
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 10000000000000000000000 }
+
+==========
+const x = -30
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: -30 }
+
+==========
+const x = -30
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: -30 }
+
+==========
+const x = -+0
+==========
+=== Expected parsing error(s):
+Token recognition error at: '-+' 
+at 1:10
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x = hello
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: SymbolLiteral { symbol: hello }
+
+==========
+const x = my_symbol
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: SymbolLiteral { symbol: my_symbol }
+
+==========
+const x = _a_symbol
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: SymbolLiteral { symbol: _a_symbol }
+
+==========
+const x = var_1
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: SymbolLiteral { symbol: var_1 }
+
+==========
+const x = 1_var
+==========
+=== Expected parsing error(s):
+Unwanted token: <IDENTIFIER>; expecting { <EOF> } 
+at 1:11
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 1 }
+

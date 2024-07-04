@@ -1,0 +1,46 @@
+==========
+fun main() { x = 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: VarAffect
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun main() { x = }
+==========
+=== Expected parsing error(s):
+Cannot process token: '}'; stop parsing 
+at 1:17
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: UnitLiteral
+
+==========
+fun main() { x: int = 0 }
+==========
+=== Expected parsing error(s):
+Cannot process token: ':'; stop parsing 
+at 1:14
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: UnitLiteral
+

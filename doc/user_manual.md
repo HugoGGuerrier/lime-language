@@ -12,7 +12,7 @@ fun do_something() { ... }
 
 // No need to comment this...
 fun main() {
-    do_something();
+    do_something()
 }
 ```
 
@@ -31,11 +31,11 @@ const a_string = "Hello!"
 const an_int = 42
 
 fun say_hello() {
-    println(a_string);
+    println(a_string)
 }
 
 fun main() {
-    say_hello();
+    say_hello()
 }
 ```
 
@@ -86,9 +86,23 @@ fun add(x: int, y: int) {
 }
 ```
 
+You can also provide default value for function parameters, this way, users can
+call your function without value for this parameter.
+
+```lime
+fun add (x: int, y: int = 0) {
+    x + y
+}
+
+fun main() {
+    add(1, 2);
+    add(1)
+}
+```
+
 As you can see, there is no `return` keyword in lime, this is because the block
 construct after a function declaration is an expression (see the 
-*Block-expression* section). Thus, the result of the function is the value of
+**Block-expression** section). Thus, the result of the function is the value of
 this expression.
 
 **Note:** In the future, the type annotations for parameters will be optional.
@@ -104,7 +118,7 @@ const a = [1, 2, 3]
 const b = "First"
 
 fun main() {
-    const lst = a
+    const lst = a;
     lst[0] = 50; // Will raise an error at compilation
     b = "Second"; // Will also raise an error
 }
@@ -121,12 +135,12 @@ const str: string = "Hello"
 
 You can declare a variable in any lexical environment except for the top-level
 one. A variable can be mutated and its value can be changed after its
-declaration. You can declare a new variable with the `let` keyword:
+declaration. You can declare a new variable with the `var` keyword:
 
 ```lime
 fun main() {
-    let x = 40;
-    let y = 2;
+    var x = 40;
+    vart= y = 2;
 }
 ```
 
@@ -135,8 +149,8 @@ declaration:
 
 ```lime
 fun main() {
-    let x: int = 40;
-    let y: string = "Hello";
+    var x: int = 40;
+    var y: string = "Hello";
 }
 ```
 
@@ -147,8 +161,8 @@ provide a type annotation to the variable.
 
 ```lime
 fun main {
-    let x: string;
-    let y = "Hello ";
+    var x: string;
+    var y = "Hello ";
     
     y = x + y;
     
@@ -160,27 +174,6 @@ fun main {
 
 In the Lime language quite all syntax constructs are expressions then can be
 typed and have a value.
-
-### Literals
-
-Lime allows you to express literal values of many type. While this list will
-change in the future, here are the possible literals:
-- Unit literal: `()` - typed as `unit`
-- Boolean literal: `true` or `false` - typed as `bool`
-- Integer literal: `1`, `42` or `-90` - typed as `int`
-- Symbolic literal: `my_var`, `my_const` or `my_fun` - typed following the
-  bounded value.
-
-### Bracketed expression
-
-You can surround any expression with brackets to increase its precedence.
-Example:
-
-```lime
-const x = (1 - 1) * (2 + 2)
-// Is not the same as
-const y = 1 - 1 * 2 + 2
-```
 
 ### Block-Expression
 
@@ -209,10 +202,29 @@ Some constructs in block expressions don't need to end with a semicolon:
  - Nested block expressions
  - Conditional expressions (`if ... else ...`)
 
+### Conditional expression
+
+You can express a conditional expression with the `if` and `else` keywords.
+Additionally being an expression, the `if/else` construction can be used to
+control the execution flow of your program.
+Example:
+
+```lime
+fun main() {
+    var x = if my_condition { 1 } else { 2 };
+    if x == 0 {
+        println("Hello!");
+    } else {
+        println("World!");
+    }
+    println("The end");
+}
+```
+
 ### Function calls
 
 You can call a function as in any other language, with some parentheses. A
-function call is an expression and its type will be the type of the called
+function call is an expression and its type will be the one of the called
 function result.
 
 ```lime
@@ -220,6 +232,17 @@ fun add(x: int, y: int) { x + y }
 
 // Call to the "add" function
 const added = add(40, 2)
+```
+
+To make long calls more readable, you can use the named arguments format.
+
+```lime
+const value = long_call(
+    param_1=true
+    param_2=54
+    ...
+    param_n="finally..."
+)
 ```
 
 In Lime, functions are first class citizens, so you can use the call syntax
@@ -237,21 +260,39 @@ fun get_add() {
 const added = get_add()(40, 2)
 ```
 
-### Conditional expression
 
-You can express a conditional expression with the `if` and `else` keywords.
-Example:
+**Note:** Due to current limitations, the named argument format is not
+available when the callee part of a function call is not a name directly
+referring to a function.
 
 ```lime
-fun main() {
-    let x = if my_condition { 1 } else { 2 };
-    if x == 0 {
-        println("Hello!");
-    } else {
-        println("World!");
-    }
-    println("The end");
-}
+fun add(x: int, y: int) { x + y }
+
+fun get_add() { add }
+
+const added_1 = add(x=1, y=2)        // Valid code
+const added_2 = get_add()(x=1, y=2)  // Will fail at compilation! 
+```
+
+### Bracketed expression
+
+You can surround any expression with brackets to increase its precedence.
+Example:
+
+### Literals
+
+Lime allows you to express literal values of many type. While this list will
+change in the future, here are the possible literals:
+- Unit literal: `()` - typed as `unit`
+- Boolean literal: `true` or `false` - typed as `bool`
+- Integer literal: `1`, `42` or `-90` - typed as `int`
+- Symbolic literal: `my_var`, `my_const` or `my_fun` - typed following the
+  bounded value.
+
+```lime
+const x = (1 - 1) * (2 + 2)
+// Is not the same as
+const y = 1 - 1 * 2 + 2
 ```
 
 ## Lexical environments

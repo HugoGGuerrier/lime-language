@@ -1,0 +1,182 @@
+==========
+const x = {}
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: UnitLiteral
+
+==========
+const x = { var x = 0; 0 }
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BlockExpr
+|  |  |  elems: BlockElems (list node)
+|  |  |  |  <0>: VarDecl
+|  |  |  |  |  name: Identifier { text: x }
+|  |  |  |  |  type: None
+|  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+const x = { var x = 0; 0; }
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BlockExpr
+|  |  |  elems: BlockElems (list node)
+|  |  |  |  <0>: VarDecl
+|  |  |  |  |  name: Identifier { text: x }
+|  |  |  |  |  type: None
+|  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  |  <1>: IntLiteral { value: 0 }
+|  |  |  value: UnitLiteral
+
+==========
+fun main() {
+    x;
+    10;
+    false;
+    true;
+    ();
+    
+    if true {
+        0
+    } else {
+        0
+    }
+    test(arg1, arg2);
+    {
+        nested_block
+    }
+    ((0));
+    
+    x = 0;
+    var x;
+    const y = 0;
+    fun x () { 0 }                
+}
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: main }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node)
+|  |  |  |  <0>: SymbolLiteral { symbol: x }
+|  |  |  |  <1>: IntLiteral { value: 10 }
+|  |  |  |  <2>: BooleanLiteral { value: false }
+|  |  |  |  <3>: BooleanLiteral { value: true }
+|  |  |  |  <4>: UnitLiteral
+|  |  |  |  <5>: ConditionalExpr
+|  |  |  |  |  condition: BooleanLiteral { value: true }
+|  |  |  |  |  thenExpr: BlockExpr
+|  |  |  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  |  |  elseExpr: BlockExpr
+|  |  |  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  |  <6>: FunCall
+|  |  |  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  |  |  args: ArgList (list node)
+|  |  |  |  |  |  <0>: Arg
+|  |  |  |  |  |  |  name: None
+|  |  |  |  |  |  |  value: SymbolLiteral { symbol: arg1 }
+|  |  |  |  |  |  <1>: Arg
+|  |  |  |  |  |  |  name: None
+|  |  |  |  |  |  |  value: SymbolLiteral { symbol: arg2 }
+|  |  |  |  <7>: BlockExpr
+|  |  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  |  value: SymbolLiteral { symbol: nested_block }
+|  |  |  |  <8>: BracketExpr
+|  |  |  |  |  expr: BracketExpr
+|  |  |  |  |  |  expr: IntLiteral { value: 0 }
+|  |  |  |  <9>: VarAffect
+|  |  |  |  |  name: Identifier { text: x }
+|  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  |  <10>: VarDecl
+|  |  |  |  |  name: Identifier { text: x }
+|  |  |  |  |  type: None
+|  |  |  |  |  value: None
+|  |  |  |  <11>: ConstDecl
+|  |  |  |  |  name: Identifier { text: y }
+|  |  |  |  |  type: None
+|  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  |  <12>: FunDecl
+|  |  |  |  |  name: Identifier { text: x }
+|  |  |  |  |  params: ParamList (list node) <EMPTY>
+|  |  |  |  |  returnType: None
+|  |  |  |  |  body: BlockExpr
+|  |  |  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  value: UnitLiteral
+
+==========
+const x = { true; const x = 0;
+==========
+=== Expected parsing error(s):
+Unwanted token: <EOF>; expecting { '(', '{', '}', ';', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:30
+Cannot process token: <EOF>; stop parsing 
+at 1:30
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BlockExpr
+|  |  |  elems: BlockElems (list node)
+|  |  |  |  <0>: BooleanLiteral { value: true }
+|  |  |  |  <1>: ConstDecl
+|  |  |  |  |  name: Identifier { text: x }
+|  |  |  |  |  type: None
+|  |  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  value: UnitLiteral
+
+==========
+const x = { call( }
+==========
+=== Expected parsing error(s):
+Cannot process token: '}'; stop parsing 
+at 1:18
+Unexpected input: '}'; expecting { '(', ')', '{', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:18
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: UnitLiteral
+|  |  |  args: ArgList (list node) <EMPTY>
+
+==========
+const x = { error(; 0 }
+==========
+=== Expected parsing error(s):
+Cannot process token: ';'; stop parsing 
+at 1:18
+Unexpected input: ';'; expecting { '(', ')', '{', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:18
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: UnitLiteral
+|  |  |  args: ArgList (list node) <EMPTY>
+

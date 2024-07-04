@@ -12,7 +12,7 @@ import org.antlr.v4.kotlinruntime.Parser
 import org.antlr.v4.kotlinruntime.Token
 import org.antlr.v4.kotlinruntime.Vocabulary
 
-class ErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
+class ParsingErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
     companion object {
         /** Get the displaying name of a token, it may be null. */
         private fun tokenName(
@@ -50,7 +50,7 @@ class ErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
             }
         unit.diagnostics.add(
             Diagnostic(
-                "Unexpected input: ${tokenName(current, recognizer.vocabulary)}, expecting $expecting",
+                "Unexpected input: ${tokenName(current, recognizer.vocabulary)}; expecting $expecting",
                 location =
                     if (current != null) {
                         SourceSection.fromToken(unit.source, current)
@@ -68,7 +68,7 @@ class ErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
         val current = e.offendingToken!!
         unit.addDiagnostic(
             Diagnostic(
-                "No viable parsing alternative",
+                "Cannot process token: ${tokenName(current, recognizer.vocabulary)}; stop parsing",
                 location = SourceSection.fromToken(unit.source, current),
             ),
         )
@@ -107,7 +107,7 @@ class ErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
         val unwanted = recognizer.currentToken!!
         unit.diagnostics.add(
             Diagnostic(
-                "Unwanted token: ${tokenName(unwanted, recognizer.vocabulary)}, expecting $expecting",
+                "Unwanted token: ${tokenName(unwanted, recognizer.vocabulary)}; expecting $expecting",
                 location = SourceSection.fromToken(unit.source, unwanted),
             ),
         )

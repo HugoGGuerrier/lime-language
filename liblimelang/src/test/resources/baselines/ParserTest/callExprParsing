@@ -1,0 +1,124 @@
+==========
+const x = test()
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node) <EMPTY>
+
+==========
+const x = test(y)
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node)
+|  |  |  |  <0>: Arg
+|  |  |  |  |  name: None
+|  |  |  |  |  value: SymbolLiteral { symbol: y }
+
+==========
+const x = test(y, z)
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node)
+|  |  |  |  <0>: Arg
+|  |  |  |  |  name: None
+|  |  |  |  |  value: SymbolLiteral { symbol: y }
+|  |  |  |  <1>: Arg
+|  |  |  |  |  name: None
+|  |  |  |  |  value: SymbolLiteral { symbol: z }
+
+==========
+const x = test(y, z,)
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node)
+|  |  |  |  <0>: Arg
+|  |  |  |  |  name: None
+|  |  |  |  |  value: SymbolLiteral { symbol: y }
+|  |  |  |  <1>: Arg
+|  |  |  |  |  name: None
+|  |  |  |  |  value: SymbolLiteral { symbol: z }
+
+==========
+const x = test(a=y, b=z,)
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node)
+|  |  |  |  <0>: Arg
+|  |  |  |  |  name: Identifier { text: a }
+|  |  |  |  |  value: SymbolLiteral { symbol: y }
+|  |  |  |  <1>: Arg
+|  |  |  |  |  name: Identifier { text: b }
+|  |  |  |  |  value: SymbolLiteral { symbol: z }
+
+==========
+const x = test(
+==========
+=== Expected parsing error(s):
+Missing ')' (got <EOF> instead) 
+at 1:15
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node) <EMPTY>
+
+==========
+const x = test(a=)
+==========
+=== Expected parsing error(s):
+Cannot process token: ')'; stop parsing 
+at 1:17
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node) <EMPTY>
+
+==========
+const x = test(x,,)
+==========
+=== Expected parsing error(s):
+Unwanted token: ','; expecting { ')' } 
+at 1:17
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: FunCall
+|  |  |  callee: SymbolLiteral { symbol: test }
+|  |  |  args: ArgList (list node)
+|  |  |  |  <0>: Arg
+|  |  |  |  |  name: None
+|  |  |  |  |  value: SymbolLiteral { symbol: x }
+

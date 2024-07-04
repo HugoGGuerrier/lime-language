@@ -12,6 +12,6 @@ import com.limelanguage.ast.expressions.Expr
 class FunCall(
     unit: AnalysisUnit,
     location: SourceSection,
-    @Child(0) val callee: Expr,
-    @Child(1) val args: ArgList,
+    @Child(0) val callee: Expr?,
+    @Child(1) val args: ArgList?,
 ) : Expr(unit, location)

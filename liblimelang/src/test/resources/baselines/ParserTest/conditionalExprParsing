@@ -1,0 +1,88 @@
+==========
+const x = if true {0} else {1}
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ConditionalExpr
+|  |  |  condition: BooleanLiteral { value: true }
+|  |  |  thenExpr: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  elseExpr: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: IntLiteral { value: 1 }
+
+==========
+const x = if true {0}
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ConditionalExpr
+|  |  |  condition: BooleanLiteral { value: true }
+|  |  |  thenExpr: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  elseExpr: None
+
+==========
+const x = if true else {1}
+==========
+=== Expected parsing error(s):
+Unwanted token: 'else'; expecting { '{' } 
+at 1:18
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ConditionalExpr
+|  |  |  condition: BooleanLiteral { value: true }
+|  |  |  thenExpr: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: IntLiteral { value: 1 }
+|  |  |  elseExpr: None
+
+==========
+const x = if true {0} else 
+==========
+=== Expected parsing error(s):
+Unexpected input: <EOF>; expecting { '{' } 
+at 1:27
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ConditionalExpr
+|  |  |  condition: BooleanLiteral { value: true }
+|  |  |  thenExpr: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  elseExpr: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: UnitLiteral
+
+==========
+const x = if {0} else {1}
+==========
+=== Expected parsing error(s):
+Unwanted token: 'else'; expecting { '{' } 
+at 1:17
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ConditionalExpr
+|  |  |  condition: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: IntLiteral { value: 0 }
+|  |  |  thenExpr: BlockExpr
+|  |  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  |  value: IntLiteral { value: 1 }
+|  |  |  elseExpr: None
+

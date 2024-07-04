@@ -31,10 +31,16 @@ kotlin {
 
 // Project dependencies
 dependencies {
+    // Kotlin reflection
     implementation(kotlin("reflect"))
+
+    // ANTLR runtime for Kotlin
     implementation("com.strumenta:antlr-kotlin-runtime:1.0.0-RC3")
 
+    // Test dependencies
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("io.github.java-diff-utils:java-diff-utils:4.12")
 }
 

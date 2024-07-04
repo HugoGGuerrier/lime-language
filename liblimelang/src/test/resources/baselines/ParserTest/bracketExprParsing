@@ -1,0 +1,65 @@
+==========
+const x = (0)
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BracketExpr
+|  |  |  expr: IntLiteral { value: 0 }
+
+==========
+const x = (((0)))
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BracketExpr
+|  |  |  expr: BracketExpr
+|  |  |  |  expr: BracketExpr
+|  |  |  |  |  expr: IntLiteral { value: 0 }
+
+==========
+const x = (0
+==========
+=== Expected parsing error(s):
+Missing ')' (got <EOF> instead) 
+at 1:12
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BracketExpr
+|  |  |  expr: IntLiteral { value: 0 }
+
+==========
+const x = (0))
+==========
+=== Expected parsing error(s):
+Unwanted token: ')'; expecting { <EOF> } 
+at 1:13
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BracketExpr
+|  |  |  expr: IntLiteral { value: 0 }
+
+==========
+const x = ((0)
+==========
+=== Expected parsing error(s):
+Missing ')' (got <EOF> instead) 
+at 1:14
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: BracketExpr
+|  |  |  expr: BracketExpr
+|  |  |  |  expr: IntLiteral { value: 0 }
+

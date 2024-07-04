@@ -8,13 +8,14 @@ import com.limelanguage.ast.LimeNode
 import com.limelanguage.ast.Module
 import com.limelanguage.ast.declarations.ConstDecl
 import com.limelanguage.ast.declarations.Decl
+import com.limelanguage.ast.declarations.VarAffect
 import com.limelanguage.ast.declarations.VarDecl
 import com.limelanguage.ast.declarations.function.FunDecl
 import com.limelanguage.ast.declarations.function.Param
 import com.limelanguage.ast.declarations.function.ParamList
+import com.limelanguage.ast.expressions.BracketExpr
 import com.limelanguage.ast.expressions.ConditionalExpr
 import com.limelanguage.ast.expressions.Expr
-import com.limelanguage.ast.expressions.VarAffect
 import com.limelanguage.ast.expressions.block.BlockElems
 import com.limelanguage.ast.expressions.block.BlockExpr
 import com.limelanguage.ast.expressions.call.Arg
@@ -27,7 +28,7 @@ import com.limelanguage.ast.expressions.literals.UnitLiteral
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.Token
 import org.antlr.v4.kotlinruntime.ast.Position
-import org.antlr.v4.kotlinruntime.tree.TerminalNode
+import java.util.Optional
 
 /**
  * This visitor translates visited Lime syntactic construct into AST nodes. This visitor should be
@@ -35,7 +36,7 @@ import org.antlr.v4.kotlinruntime.tree.TerminalNode
  *
  * @property unit The unit to translate nodes for.
  */
-class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
+class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
     // ----- Visiting methods -----
 
     // --- File top-level
@@ -58,23 +59,23 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
         return VarDecl(
             unit,
             loc(ctx),
-            id(ctx.name)!!,
-            id(ctx.type),
-            ctx.value?.accept(this) as? Expr,
+            name = id(ctx.name),
+            type = Optional.ofNullable(id(ctx.type)),
+            value = Optional.ofNullable(ctx.value?.accept(this) as? Expr),
         )
     }
 
     override fun visitVarAffect(ctx: LimeParser.VarAffectContext): LimeNode? {
-        return VarAffect(unit, loc(ctx), id(ctx.name)!!, ctx.value!!.accept(this) as Expr)
+        return VarAffect(unit, loc(ctx), id(ctx.name), ctx.value?.accept(this) as? Expr)
     }
 
     override fun visitConstDecl(ctx: LimeParser.ConstDeclContext): LimeNode? {
         return ConstDecl(
             unit,
             loc(ctx),
-            id(ctx.name),
-            id(ctx.type),
-            ctx.value?.accept(this) as? Expr,
+            name = id(ctx.name),
+            type = Optional.ofNullable(id(ctx.type)),
+            value = ctx.value?.accept(this) as? Expr,
         )
     }
 
@@ -82,25 +83,75 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
         return FunDecl(
             unit,
             loc(ctx),
-            id(ctx.name)!!,
-            ctx.params?.accept(this) as? ParamList,
-            id(ctx.type),
-            ctx.body!!.accept(this) as Expr,
+            name = id(ctx.name),
+            params = ctx.params?.accept(this) as? ParamList,
+            returnType = Optional.ofNullable(id(ctx.type)),
+            body = ctx.body?.accept(this) as? Expr,
         )
+    }
+
+    // --- Function call
+
+    override fun visitFunCallExpr(ctx: LimeParser.FunCallExprContext): LimeNode? {
+        return FunCall(
+            unit,
+            loc(ctx),
+            callee = ctx.callee?.accept(this) as? Expr,
+            args = ctx.args?.accept(this) as? ArgList,
+        )
+    }
+
+    // --- Bracketed expression
+
+    override fun visitBracketExpr(ctx: LimeParser.BracketExprContext): LimeNode? {
+        return BracketExpr(
+            unit,
+            loc(ctx),
+            ctx.inner?.accept(this) as? Expr,
+        )
+    }
+
+    // --- Conditional expression
+
+    override fun visitConditionalExpr(ctx: LimeParser.ConditionalExprContext): LimeNode? {
+        return ConditionalExpr(
+            unit,
+            loc(ctx),
+            condition = ctx.condition?.accept(this) as? Expr,
+            thenExpr = ctx.thenExpr?.accept(this) as? Expr,
+            elseExpr = Optional.ofNullable(ctx.elseExpr?.accept(this) as? Expr),
+        )
+    }
+
+    // --- Block expression
+
+    override fun visitBlock(ctx: LimeParser.BlockContext): LimeNode? {
+        // Get the block elements
+        val elems = BlockElems(unit, loc(ctx))
+        ctx.block_elem().forEach { elems.children.add(it.accept(this) as Expr) }
+
+        // Get the block value
+        var value = ctx.value?.accept(this) as? Expr
+        if (value == null) {
+            value = UnitLiteral(unit, loc(ctx))
+        }
+
+        // Return the resulting block expression
+        return BlockExpr(unit, loc(ctx), elems, value)
+    }
+
+    override fun visitBlockElem(ctx: LimeParser.BlockElemContext): LimeNode? {
+        return if (ctx.belem != null) {
+            ctx.belem!!.accept(this)
+        } else {
+            ctx.uelem!!.accept(this)
+        }
     }
 
     // --- Literals
 
     override fun visitUnitLiteral(ctx: LimeParser.UnitLiteralContext): LimeNode? {
         return UnitLiteral(unit, loc(ctx))
-    }
-
-    override fun visitIntLiteral(ctx: LimeParser.IntLiteralContext): LimeNode? {
-        return IntLiteral(unit, loc(ctx), ctx.text.toBigInteger())
-    }
-
-    override fun visitSymbolLiteral(ctx: LimeParser.SymbolLiteralContext): LimeNode? {
-        return SymbolLiteral(unit, loc(ctx), ctx.text)
     }
 
     override fun visitTrueBooleanLiteral(ctx: LimeParser.TrueBooleanLiteralContext): LimeNode? {
@@ -111,51 +162,12 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
         return BooleanLiteral(unit, loc(ctx), false)
     }
 
-    // --- Bracketed expression
-
-    override fun visitBracketExpr(ctx: LimeParser.BracketExprContext): LimeNode? {
-        return ctx.inner!!.accept(this)
+    override fun visitIntLiteral(ctx: LimeParser.IntLiteralContext): LimeNode? {
+        return IntLiteral(unit, loc(ctx), ctx.text.toBigInteger())
     }
 
-    // --- Block expression
-
-    override fun visitBlock(ctx: LimeParser.BlockContext): LimeNode? {
-        return BlockExpr(unit, loc(ctx), ctx.elems!!.accept(this) as BlockElems)
-    }
-
-    override fun visitBlockElems(ctx: LimeParser.BlockElemsContext): LimeNode? {
-        val res = BlockElems(unit, loc(ctx))
-        ctx.children!!
-            .filterIsInstance<ParserRuleContext>()
-            .forEach { res.children.add(it.accept(this) as Expr) }
-        val lastChild = ctx.getChild(ctx.childCount - 1)!!
-        if (lastChild is TerminalNode && lastChild.symbol.type == LimeLexer.Tokens.SEMI_COLON) {
-            res.children.add(UnitLiteral(unit, loc(lastChild.symbol)))
-        }
-        return res
-    }
-
-    // --- Function call
-
-    override fun visitFunCallExpr(ctx: LimeParser.FunCallExprContext): LimeNode? {
-        return FunCall(
-            unit,
-            loc(ctx),
-            ctx.callee!!.accept(this) as Expr,
-            ctx.args!!.accept(this) as ArgList,
-        )
-    }
-
-    // --- Conditional expression
-
-    override fun visitConditional(ctx: LimeParser.ConditionalContext): LimeNode? {
-        return ConditionalExpr(
-            unit,
-            loc(ctx),
-            ctx.condition!!.accept(this) as Expr,
-            ctx.thenExpr!!.accept(this) as Expr,
-            ctx.elseExpr?.accept(this) as? Expr,
-        )
+    override fun visitSymbolLiteral(ctx: LimeParser.SymbolLiteralContext): LimeNode? {
+        return SymbolLiteral(unit, loc(ctx), ctx.text)
     }
 
     // --- Parameter
@@ -167,7 +179,13 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
     }
 
     override fun visitParam(ctx: LimeParser.ParamContext): LimeNode? {
-        return Param(unit, loc(ctx), id(ctx.name)!!, id(ctx.type)!!)
+        return Param(
+            unit,
+            loc(ctx),
+            name = id(ctx.name),
+            type = id(ctx.type),
+            defaultValue = Optional.ofNullable(ctx.defaultValue?.accept(this) as? Expr),
+        )
     }
 
     // --- Argument
@@ -179,7 +197,12 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
     }
 
     override fun visitArg(ctx: LimeParser.ArgContext): LimeNode? {
-        return Arg(unit, loc(ctx), ctx.value!!.accept(this) as Expr)
+        return Arg(
+            unit,
+            loc(ctx),
+            name = Optional.ofNullable(id(ctx.name)),
+            value = ctx.value?.accept(this) as? Expr,
+        )
     }
 
     // ----- Utils methods -----
@@ -200,7 +223,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeBaseVisitor<LimeNode?>() {
 
     /** Synthetize a new identifier node from an ANTLR token. */
     private fun id(token: Token?): Identifier? {
-        if (token == null) {
+        if (token == null || token.text == "<missing ID>") {
             return null
         } else {
             return Identifier(

@@ -1,0 +1,168 @@
+==========
+fun test() { 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun test(x: int) { 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node)
+|  |  |  <0>: Param
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun test(x: int, y: int) { 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node)
+|  |  |  <0>: Param
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  |  <1>: Param
+|  |  |  |  name: Identifier { text: y }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun test(x: int, y: int,) { 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node)
+|  |  |  <0>: Param
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  |  <1>: Param
+|  |  |  |  name: Identifier { text: y }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun test(x: int, y: int = 0) { 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node)
+|  |  |  <0>: Param
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  |  <1>: Param
+|  |  |  |  name: Identifier { text: y }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: IntLiteral { value: 0 }
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun test() -> int { 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: Identifier { text: int }
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+fun ()
+==========
+=== Expected parsing error(s):
+Missing <IDENTIFIER> (got '(' instead) 
+at 1:4
+Unexpected input: <EOF>; expecting { '{', '->' } 
+at 1:6
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: <PARSING_ERROR>
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: <PARSING_ERROR>
+
+==========
+fun test
+==========
+=== Expected parsing error(s):
+Unexpected input: <EOF>; expecting { '(' } 
+at 1:8
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: <PARSING_ERROR>
+|  |  returnType: None
+|  |  body: <PARSING_ERROR>
+
+==========
+fun test()
+==========
+=== Expected parsing error(s):
+Unexpected input: <EOF>; expecting { '{', '->' } 
+at 1:10
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: <PARSING_ERROR>
+
+==========
+fun test(x: int, y: int { 0 }
+==========
+=== Expected parsing error(s):
+Missing ')' (got '{' instead) 
+at 1:24
+=== Fallback tree:
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node)
+|  |  |  <0>: Param
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  |  <1>: Param
+|  |  |  |  name: Identifier { text: y }
+|  |  |  |  type: Identifier { text: int }
+|  |  |  |  defaultValue: None
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+

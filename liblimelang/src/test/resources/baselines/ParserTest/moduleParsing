@@ -1,1 +1,65 @@
-This is a test
+==========
+
+==========
+Module (list node) <EMPTY>
+
+==========
+const x = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x = 0
+const y = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+|  <1>: ConstDecl
+|  |  name: Identifier { text: y }
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+
+==========
+fun test() {
+    0
+}
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node) <EMPTY>
+|  |  returnType: None
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+0
+==========
+=== Expected parsing error(s):
+Unwanted token: <INT_LITERAL>; expecting { <EOF> } 
+at 1:0
+=== Fallback tree:
+Module (list node) <EMPTY>
+
+==========
+const x = 0
+var z = 0
+==========
+=== Expected parsing error(s):
+Unexpected input: 'var'; expecting { <EOF>, '(', 'fun', 'const' } 
+at 2:0
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: IntLiteral { value: 0 }
+

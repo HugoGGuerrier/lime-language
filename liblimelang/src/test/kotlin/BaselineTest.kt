@@ -38,29 +38,33 @@ abstract class BaselineTest {
          */
         fun computeDiffMessage(rows: List<DiffRow>): String? {
             val resBuilder = StringBuilder()
-            var emptyPrevious = true
-            for (row in rows) {
+            val linesToDisplay = HashSet<Int>()
+            for ((i, row) in rows.withIndex()) {
+                when (row.tag) {
+                    DiffRow.Tag.CHANGE, DiffRow.Tag.INSERT, DiffRow.Tag.DELETE -> {
+                        linesToDisplay.addAll((i - 3)..(i + 3))
+                    }
+                    else -> Unit
+                }
+            }
+
+            for (i in linesToDisplay.filter { it >= 0 && it < rows.size }.sorted()) {
+                val row = rows[i]
                 when (row.tag) {
                     DiffRow.Tag.CHANGE -> {
                         resBuilder.append("-").appendLine(row.oldLine)
                         resBuilder.append("+").appendLine(row.newLine)
-                        emptyPrevious = false
                     }
                     DiffRow.Tag.INSERT -> {
                         resBuilder.append("+").appendLine(row.newLine)
-                        emptyPrevious = false
                     }
                     DiffRow.Tag.DELETE -> {
                         resBuilder.append("-").appendLine(row.oldLine)
-                        emptyPrevious = false
                     }
                     DiffRow.Tag.EQUAL -> {
-                        if (!emptyPrevious) {
-                            resBuilder.appendLine()
-                            emptyPrevious = true
-                        }
+                        resBuilder.append(" ").appendLine(row.oldLine)
                     }
-                    null -> Unit
+                    else -> Unit
                 }
             }
             val res = resBuilder.toString()
@@ -99,7 +103,16 @@ abstract class BaselineTest {
     }
 
     /** Add the given value followed by a newline to the test output for later comparison. */
-    fun output(v: Any) = testOutput.append(v).append('\n')
+    fun output(
+        v: Any?,
+        newLine: Boolean = true,
+    ) {
+        if (newLine) {
+            testOutput.appendLine(v)
+        } else {
+            testOutput.append(v)
+        }
+    }
 
     /**
      * Compare the output of the current test and the baseline file content. If it doesn't match

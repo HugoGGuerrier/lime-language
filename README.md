@@ -26,14 +26,14 @@ fun add(x, y) = { x + y }
 
 fun main() {
     // Using the "add" function to add integers
-    let x = add(1, 2);
+    var x = add(1, 2);
 
     // Using the "add" function to concatenate strings
-    let y = add("Hello", "World");
+    var y = add("Hello", "World");
 
     // Will raise an error at compile time since there is no "+" operation
     // defined for integer and string
-    let z = add(x, y);
+    var z = add(x, y);
 }
 ```
 
@@ -56,7 +56,7 @@ You can find in this folder:
    simple yet complete frontend, used by other toolchain parts to parse and
    analyse Lime sources.
  - The Lime compiler, in the `limec` directory. A compiler which uses
-   `liblimelang` to turn Lime sources to LLVM bitcode
+   `liblimelang` to turn Lime sources into LLVM bitcode
 
 ## Build the toolchain
 

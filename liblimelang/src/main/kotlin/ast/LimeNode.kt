@@ -2,6 +2,8 @@ package com.limelanguage.ast
 
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import java.util.Optional
+import kotlin.jvm.optionals.getOrDefault
 import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberProperties
@@ -9,6 +11,10 @@ import kotlin.reflect.full.memberProperties
 /**
  * This class is the base of all lime nodes, it contains all common information and operations
  * require for all AST node types.
+ *
+ * AST nodes have children denoted by the [Child] annotation. All children are nullable to allow error recovery from the
+ * Lime parser, so if a child is null, there was at least an error during the parsing. Some children are wrapped in the
+ * [Optional] class, those can be empty even when there is no parsing error.
  *
  * @property unit The analysis unit which owns this node.
  * @property location The section in the Lime sources corresponding to this node.
@@ -29,8 +35,9 @@ abstract class LimeNode(val unit: AnalysisUnit, val location: SourceSection) {
         /** Util internal function to get the string representation of a child field. */
         fun repr(v: Any?): String {
             return when (v) {
-                null -> "None"
+                null -> "<PARSING_ERROR>"
                 is LimeNode -> v.treeString(indentLevel + 1)
+                is Optional<*> -> v.map { (it as LimeNode).treeString(indentLevel + 1) }.getOrDefault("None")
                 else -> v.toString()
             }
         }
