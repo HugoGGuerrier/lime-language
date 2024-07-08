@@ -175,6 +175,25 @@ fun main {
 In the Lime language quite all syntax constructs are expressions then can be
 typed and have a value.
 
+### Conditional expression
+
+You can express a conditional expression with the `if` and `else` keywords.
+Additionally being an expression, the `if/else` construction can be used to
+control the execution flow of your program.
+Example:
+
+```lime
+fun main() {
+    var x = if my_condition { 1 } else { 2 };
+    if x == 0 {
+        println("Hello!");
+    } else {
+        println("World!");
+    }
+    println("The end");
+}
+```
+
 ### Block-Expression
 
 The block expression is a special kind of expression. It is a collection of
@@ -198,28 +217,83 @@ const y = {
 ```
 
 Some constructs in block expressions don't need to end with a semicolon:
- - Function declarations
- - Nested block expressions
- - Conditional expressions (`if ... else ...`)
+- Function declarations
+- Nested block expressions
+- Conditional expressions (`if ... else ...`)
 
-### Conditional expression
+### Operations
 
-You can express a conditional expression with the `if` and `else` keywords.
-Additionally being an expression, the `if/else` construction can be used to
-control the execution flow of your program.
+There are several operations available in the Lime language, divided in 3 kinds
+for now:
+
+#### Logical operations
+
+Those operations are useful to create logical relation between boolean values,
+there are 3 of them:
+- Logical "and": `&&`
+- Logical "or": `||`
+- Logical "not": `!`
+
 Example:
 
 ```lime
 fun main() {
-    var x = if my_condition { 1 } else { 2 };
-    if x == 0 {
-        println("Hello!");
-    } else {
-        println("World!");
+    if a && b || !c {
+        print("Hello world");
     }
-    println("The end");
 }
 ```
+
+#### Comparison operations
+
+Used to compare values to others. There are 6 of them:
+- Equality: `==`
+- Non-Equality: `!=`
+- Less than: `<`
+- Greater than: `>`
+- Less than or equals: `<=`
+- Greater than or equals: `>=`
+
+Example:
+```lime
+fun main() {
+    if a == 1 && b >= 2 {
+        print("Hello world");
+    }
+}
+```
+
+#### Arithmetical operations
+
+Make some computing on Lime values using those operations:
+- Plus: `+`
+- Minus: `-`
+- Multiply: `*`
+- Divide: `/`
+
+Example:
+
+```lime
+fun main() {
+    if a + 5 == b / 4 {
+        print("Hello world");
+    }
+}
+```
+
+You can also use `-` and `+` as unary operators to negate or straighten a
+value:
+
+```lime
+fun main() {
+    if -a == +b {
+        print("Hello world");
+    }
+}
+```
+
+**Note:** In future version, Lime will allow user to manually overload
+operators to define custom behaviors.
 
 ### Function calls
 
@@ -301,11 +375,11 @@ A lexical environment is a set of bindings associating symbols to their values.
 Symbols declared in a lexical environment are only visible inside this one or
 its children.
 Here are the language constructs which introduce a new lexical environment:
- - Top-level
- - Function declaration
- - Block expression
+- Top-level
+- Function declaration
+- Block expression
 
 ## Features roadmap
 
- - Type declarations at top-level
- - Function parameters type inference
+- Type declarations at top-level
+- Function parameters type inference
