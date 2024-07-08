@@ -89,7 +89,7 @@ Module (list node)
 const x = a &&
 ==========
 === Expected parsing error(s):
-Unexpected input: <EOF>; expecting { '(', '{', '+', '-', '!', 'true', 'false', 'if', <IDENTIFIER>, <INT_LITERAL> } 
+Unexpected input: <EOF>; expecting { <INT_LITERAL>, '(', '{', '+', '-', '!', 'true', 'false', 'if', <IDENTIFIER> } 
 at 1:14
 === Fallback tree:
 Module (list node)
@@ -105,7 +105,7 @@ Module (list node)
 const x = !!a
 ==========
 === Expected parsing error(s):
-Unwanted token: '!'; expecting { '(', '{', '+', '-', 'true', 'false', 'if', <IDENTIFIER>, <INT_LITERAL> } 
+Unwanted token: '!'; expecting { <INT_LITERAL>, '(', '{', '+', '-', 'true', 'false', 'if', <IDENTIFIER> } 
 at 1:11
 === Fallback tree:
 Module (list node)

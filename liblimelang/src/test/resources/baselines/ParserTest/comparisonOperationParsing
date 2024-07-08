@@ -1,0 +1,88 @@
+==========
+const x = a == b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: CompBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: EqOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = a != b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: CompBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: NeqOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = a < b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: CompBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: LtOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = a > b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: CompBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: GtOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = a <= b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: CompBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: LeqOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = a >= b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: CompBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: GeqOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = a ==
+==========
+=== Expected parsing error(s):
+Unexpected input: <EOF>; expecting { <INT_LITERAL>, '(', '{', '+', '-', 'true', 'false', 'if', <IDENTIFIER> } 
+at 1:14
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: CompBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: EqOp
+|  |  |  right: <PARSING_ERROR>
+

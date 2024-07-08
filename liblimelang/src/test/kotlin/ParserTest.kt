@@ -139,6 +139,18 @@ class ParserTest : BaselineTest() {
     }
 
     @Test
+    fun comparisonOperationParsing() {
+        expectOk("const x = a == b")
+        expectOk("const x = a != b")
+        expectOk("const x = a < b")
+        expectOk("const x = a > b")
+        expectOk("const x = a <= b")
+        expectOk("const x = a >= b")
+
+        expectErr("const x = a ==")
+    }
+
+    @Test
     fun arithmeticalOperationParsing() {
         expectOk("const x = 1 + 2")
         expectOk("const x = 1 - 2")

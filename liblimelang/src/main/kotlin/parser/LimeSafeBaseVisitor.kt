@@ -75,6 +75,34 @@ open class LimeSafeBaseVisitor<T> : AbstractParseTreeVisitor<T?>(), LimeVisitor<
         return visitChildren(ctx)
     }
 
+    override fun visitCompExpr(ctx: LimeParser.CompExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitGeqExpr(ctx: LimeParser.GeqExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitEqExpr(ctx: LimeParser.EqExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitNeqExpr(ctx: LimeParser.NeqExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitLeqtExpr(ctx: LimeParser.LeqtExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitLtExpr(ctx: LimeParser.LtExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitGtExpr(ctx: LimeParser.GtExprContext): T? {
+        return visitChildren(ctx)
+    }
+
     override fun visitSumExpr(ctx: LimeParser.SumExprContext): T? {
         return visitChildren(ctx)
     }

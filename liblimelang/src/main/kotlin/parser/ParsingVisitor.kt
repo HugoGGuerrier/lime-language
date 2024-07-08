@@ -27,12 +27,19 @@ import com.limelanguage.ast.expressions.literals.SymbolLiteral
 import com.limelanguage.ast.expressions.literals.UnitLiteral
 import com.limelanguage.ast.expressions.operations.ArithBinOp
 import com.limelanguage.ast.expressions.operations.ArithUnOp
+import com.limelanguage.ast.expressions.operations.CompBinOp
 import com.limelanguage.ast.expressions.operations.LogicBinOp
 import com.limelanguage.ast.expressions.operations.LogicUnOp
 import com.limelanguage.ast.operators.AndOp
 import com.limelanguage.ast.operators.DivOp
+import com.limelanguage.ast.operators.EqOp
+import com.limelanguage.ast.operators.GeqOp
+import com.limelanguage.ast.operators.GtOp
+import com.limelanguage.ast.operators.LeqOp
+import com.limelanguage.ast.operators.LtOp
 import com.limelanguage.ast.operators.MinusOp
 import com.limelanguage.ast.operators.MulOp
+import com.limelanguage.ast.operators.NeqOp
 import com.limelanguage.ast.operators.NotOp
 import com.limelanguage.ast.operators.OrOp
 import com.limelanguage.ast.operators.PlusOp
@@ -167,6 +174,68 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
             loc(ctx),
             left = ctx.left?.accept(this) as? Expr,
             op = OrOp(unit, loc(ctx.OR().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    // --- Comparison operations
+
+    override fun visitEqExpr(ctx: LimeParser.EqExprContext): LimeNode? {
+        return CompBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = EqOp(unit, loc(ctx.EQ_OP().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitNeqExpr(ctx: LimeParser.NeqExprContext): LimeNode? {
+        return CompBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = NeqOp(unit, loc(ctx.NEQ().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitLtExpr(ctx: LimeParser.LtExprContext): LimeNode? {
+        return CompBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = LtOp(unit, loc(ctx.LT().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitGtExpr(ctx: LimeParser.GtExprContext): LimeNode? {
+        return CompBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = GtOp(unit, loc(ctx.GT().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitLeqtExpr(ctx: LimeParser.LeqtExprContext): LimeNode? {
+        return CompBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = LeqOp(unit, loc(ctx.LEQ().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitGeqExpr(ctx: LimeParser.GeqExprContext): LimeNode? {
+        return CompBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = GeqOp(unit, loc(ctx.GEQ().symbol)),
             right = ctx.right?.accept(this) as? Expr,
         )
     }

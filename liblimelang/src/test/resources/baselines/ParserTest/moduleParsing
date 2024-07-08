@@ -54,7 +54,7 @@ const x = 0
 var z = 0
 ==========
 === Expected parsing error(s):
-Unexpected input: 'var'; expecting { <EOF>, '(', '+', '-', '*', '/', '&&', '||', 'fun', 'const' } 
+Unexpected input: 'var'; expecting { <EOF>, '(', '+', '-', '*', '/', '&&', '||', '==', '!=', '<', '>', '<=', '>=', 'fun', 'const' } 
 at 2:0
 === Fallback tree:
 Module (list node)

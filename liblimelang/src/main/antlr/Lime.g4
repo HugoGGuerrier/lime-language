@@ -22,6 +22,12 @@ DIV : '/' ;
 AND : '&&' ;
 OR : '||' ;
 NOT : '!' ;
+EQ_OP : '==' ;
+NEQ : '!=' ;
+LT : '<' ;
+GT : '>' ;
+LEQ : '<=' ;
+GEQ : '>=' ;
 
 // Keywords
 TRUE : 'true' ;
@@ -72,7 +78,17 @@ logic_expr:
     ;
 
 logic_unop_expr:
-      NOT operand=sum_expr # NotExpr
+      NOT operand=comp_expr # NotExpr
+    | comp_expr # CompExpr
+    ;
+
+comp_expr:
+      left=comp_expr EQ_OP right=sum_expr # EqExpr
+    | left=comp_expr NEQ right=sum_expr # NeqExpr
+    | left=comp_expr LT right=sum_expr # LtExpr
+    | left=comp_expr GT right=sum_expr # GtExpr
+    | left=comp_expr LEQ right=sum_expr # LeqtExpr
+    | left=comp_expr GEQ right=sum_expr # GeqExpr
     | sum_expr # SumExpr
     ;
 
