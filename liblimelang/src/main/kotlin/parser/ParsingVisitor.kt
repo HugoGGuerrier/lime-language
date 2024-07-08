@@ -27,6 +27,7 @@ import com.limelanguage.ast.expressions.literals.SymbolLiteral
 import com.limelanguage.ast.expressions.literals.UnitLiteral
 import com.limelanguage.ast.expressions.operations.ArithBinOp
 import com.limelanguage.ast.expressions.operations.ArithUnOp
+import com.limelanguage.ast.expressions.operations.BinOp
 import com.limelanguage.ast.expressions.operations.CompBinOp
 import com.limelanguage.ast.expressions.operations.LogicBinOp
 import com.limelanguage.ast.expressions.operations.LogicUnOp
@@ -41,11 +42,13 @@ import com.limelanguage.ast.operators.MinusOp
 import com.limelanguage.ast.operators.MulOp
 import com.limelanguage.ast.operators.NeqOp
 import com.limelanguage.ast.operators.NotOp
+import com.limelanguage.ast.operators.Operator
 import com.limelanguage.ast.operators.OrOp
 import com.limelanguage.ast.operators.PlusOp
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.Token
 import org.antlr.v4.kotlinruntime.ast.Position
+import org.antlr.v4.kotlinruntime.tree.TerminalNode
 import java.util.Optional
 
 /**
@@ -159,85 +162,37 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
     }
 
     override fun visitAndExpr(ctx: LimeParser.AndExprContext): LimeNode? {
-        return LogicBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = AndOp(unit, loc(ctx.AND().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::LogicBinOp, ::AndOp, ctx.left, ctx.AND(), ctx.right)
     }
 
     override fun visitOrExpr(ctx: LimeParser.OrExprContext): LimeNode? {
-        return LogicBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = OrOp(unit, loc(ctx.OR().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::LogicBinOp, ::OrOp, ctx.left, ctx.OR(), ctx.right)
     }
 
     // --- Comparison operations
 
     override fun visitEqExpr(ctx: LimeParser.EqExprContext): LimeNode? {
-        return CompBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = EqOp(unit, loc(ctx.EQ_OP().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::CompBinOp, ::EqOp, ctx.left, ctx.EQ_OP(), ctx.right)
     }
 
     override fun visitNeqExpr(ctx: LimeParser.NeqExprContext): LimeNode? {
-        return CompBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = NeqOp(unit, loc(ctx.NEQ().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::CompBinOp, ::NeqOp, ctx.left, ctx.NEQ(), ctx.right)
     }
 
     override fun visitLtExpr(ctx: LimeParser.LtExprContext): LimeNode? {
-        return CompBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = LtOp(unit, loc(ctx.LT().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::CompBinOp, ::LtOp, ctx.left, ctx.LT(), ctx.right)
     }
 
     override fun visitGtExpr(ctx: LimeParser.GtExprContext): LimeNode? {
-        return CompBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = GtOp(unit, loc(ctx.GT().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::CompBinOp, ::GtOp, ctx.left, ctx.GT(), ctx.right)
     }
 
     override fun visitLeqtExpr(ctx: LimeParser.LeqtExprContext): LimeNode? {
-        return CompBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = LeqOp(unit, loc(ctx.LEQ().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::CompBinOp, ::LeqOp, ctx.left, ctx.LEQ(), ctx.right)
     }
 
     override fun visitGeqExpr(ctx: LimeParser.GeqExprContext): LimeNode? {
-        return CompBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = GeqOp(unit, loc(ctx.GEQ().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::CompBinOp, ::GeqOp, ctx.left, ctx.GEQ(), ctx.right)
     }
 
     // --- Arithmetical operations
@@ -261,43 +216,19 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
     }
 
     override fun visitPlusExpr(ctx: LimeParser.PlusExprContext): LimeNode? {
-        return ArithBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = PlusOp(unit, loc(ctx.PLUS().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::ArithBinOp, ::PlusOp, ctx.left, ctx.PLUS(), ctx.right)
     }
 
     override fun visitMinusExpr(ctx: LimeParser.MinusExprContext): LimeNode? {
-        return ArithBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = MinusOp(unit, loc(ctx.MINUS().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::ArithBinOp, ::MinusOp, ctx.left, ctx.MINUS(), ctx.right)
     }
 
     override fun visitMulExpr(ctx: LimeParser.MulExprContext): LimeNode? {
-        return ArithBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = MulOp(unit, loc(ctx.MUL().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::ArithBinOp, ::MulOp, ctx.left, ctx.MUL(), ctx.right)
     }
 
     override fun visitDivExpr(ctx: LimeParser.DivExprContext): LimeNode? {
-        return ArithBinOp(
-            unit,
-            loc(ctx),
-            left = ctx.left?.accept(this) as? Expr,
-            op = DivOp(unit, loc(ctx.DIV().symbol)),
-            right = ctx.right?.accept(this) as? Expr,
-        )
+        return binOp(ctx, ::ArithBinOp, ::DivOp, ctx.left, ctx.DIV(), ctx.right)
     }
 
     // --- Function call
@@ -405,5 +336,23 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
                 token.text ?: "",
             )
         }
+    }
+
+    /** Create a binary operation from the given description and constructors */
+    private fun binOp(
+        ctx: ParserRuleContext,
+        constructor: (AnalysisUnit, SourceSection, Expr?, Operator?, Expr?) -> BinOp,
+        opConstructor: (AnalysisUnit, SourceSection) -> Operator,
+        leftCtx: ParserRuleContext?,
+        opTerm: TerminalNode,
+        rightCtx: ParserRuleContext?,
+    ): BinOp {
+        return constructor(
+            unit,
+            loc(ctx),
+            leftCtx?.accept(this) as? Expr,
+            opConstructor(unit, loc(opTerm.symbol)),
+            rightCtx?.accept(this) as? Expr,
+        )
     }
 }

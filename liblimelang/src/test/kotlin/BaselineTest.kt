@@ -37,7 +37,7 @@ abstract class BaselineTest {
          * function returns null.
          */
         fun computeDiffMessage(rows: List<DiffRow>): String? {
-            val resBuilder = StringBuilder()
+            val res = StringBuilder()
             val linesToDisplay = HashSet<Int>()
             for ((i, row) in rows.withIndex()) {
                 when (row.tag) {
@@ -48,27 +48,34 @@ abstract class BaselineTest {
                 }
             }
 
-            for (i in linesToDisplay.filter { it >= 0 && it < rows.size }.sorted()) {
-                val row = rows[i]
-                when (row.tag) {
-                    DiffRow.Tag.CHANGE -> {
-                        resBuilder.append("-").appendLine(row.oldLine)
-                        resBuilder.append("+").appendLine(row.newLine)
+            val sortedLines = linesToDisplay.filter { it >= 0 && it < rows.size }.sorted()
+            if (sortedLines.isNotEmpty()) {
+                var prev = sortedLines.first()
+                for (i in sortedLines) {
+                    if ((i - prev) > 1) {
+                        res.appendLine()
                     }
-                    DiffRow.Tag.INSERT -> {
-                        resBuilder.append("+").appendLine(row.newLine)
+                    val row = rows[i]
+                    when (row.tag) {
+                        DiffRow.Tag.CHANGE -> {
+                            res.append("-").appendLine(row.oldLine)
+                            res.append("+").appendLine(row.newLine)
+                        }
+                        DiffRow.Tag.INSERT -> {
+                            res.append("+").appendLine(row.newLine)
+                        }
+                        DiffRow.Tag.DELETE -> {
+                            res.append("-").appendLine(row.oldLine)
+                        }
+                        DiffRow.Tag.EQUAL -> {
+                            res.append(" ").appendLine(row.oldLine)
+                        }
+                        else -> Unit
                     }
-                    DiffRow.Tag.DELETE -> {
-                        resBuilder.append("-").appendLine(row.oldLine)
-                    }
-                    DiffRow.Tag.EQUAL -> {
-                        resBuilder.append(" ").appendLine(row.oldLine)
-                    }
-                    else -> Unit
+                    prev = i
                 }
             }
-            val res = resBuilder.toString()
-            return res.ifEmpty { null }
+            return res.toString().ifEmpty { null }
         }
     }
 
