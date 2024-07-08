@@ -63,7 +63,9 @@ Module (list node)
 |  <0>: ConstDecl
 |  |  name: Identifier { text: x }
 |  |  type: None
-|  |  value: IntLiteral { value: 10000000000000000000000 }
+|  |  value: ArithUnOp
+|  |  |  op: PlusOp
+|  |  |  value: IntLiteral { value: 10000000000000000000000 }
 
 ==========
 const x = -30
@@ -72,7 +74,9 @@ Module (list node)
 |  <0>: ConstDecl
 |  |  name: Identifier { text: x }
 |  |  type: None
-|  |  value: IntLiteral { value: -30 }
+|  |  value: ArithUnOp
+|  |  |  op: MinusOp
+|  |  |  value: IntLiteral { value: 30 }
 
 ==========
 const x = -30
@@ -81,20 +85,24 @@ Module (list node)
 |  <0>: ConstDecl
 |  |  name: Identifier { text: x }
 |  |  type: None
-|  |  value: IntLiteral { value: -30 }
+|  |  value: ArithUnOp
+|  |  |  op: MinusOp
+|  |  |  value: IntLiteral { value: 30 }
 
 ==========
 const x = -+0
 ==========
 === Expected parsing error(s):
-Token recognition error at: '-+' 
-at 1:10
+Unwanted token: '+'; expecting { '(', '{', 'true', 'false', 'if', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:11
 === Fallback tree:
 Module (list node)
 |  <0>: ConstDecl
 |  |  name: Identifier { text: x }
 |  |  type: None
-|  |  value: IntLiteral { value: 0 }
+|  |  value: ArithUnOp
+|  |  |  op: MinusOp
+|  |  |  value: IntLiteral { value: 0 }
 
 ==========
 const x = hello

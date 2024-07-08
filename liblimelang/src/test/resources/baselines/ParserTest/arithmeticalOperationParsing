@@ -1,0 +1,160 @@
+==========
+const x = 1 + 2
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: IntLiteral { value: 1 }
+|  |  |  op: PlusOp
+|  |  |  right: IntLiteral { value: 2 }
+
+==========
+const x = 1 - 2
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: IntLiteral { value: 1 }
+|  |  |  op: MinusOp
+|  |  |  right: IntLiteral { value: 2 }
+
+==========
+const x = 1 * 2
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: IntLiteral { value: 1 }
+|  |  |  op: MulOp
+|  |  |  right: IntLiteral { value: 2 }
+
+==========
+const x = 1 / 2
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: IntLiteral { value: 1 }
+|  |  |  op: DivOp
+|  |  |  right: IntLiteral { value: 2 }
+
+==========
+const x = 1 + 2 - 3
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: ArithBinOp
+|  |  |  |  left: IntLiteral { value: 1 }
+|  |  |  |  op: PlusOp
+|  |  |  |  right: IntLiteral { value: 2 }
+|  |  |  op: MinusOp
+|  |  |  right: IntLiteral { value: 3 }
+
+==========
+const x = 1 * 2 + 3
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: ArithBinOp
+|  |  |  |  left: IntLiteral { value: 1 }
+|  |  |  |  op: MulOp
+|  |  |  |  right: IntLiteral { value: 2 }
+|  |  |  op: PlusOp
+|  |  |  right: IntLiteral { value: 3 }
+
+==========
+const x = 1 + 2 * 3
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: IntLiteral { value: 1 }
+|  |  |  op: PlusOp
+|  |  |  right: ArithBinOp
+|  |  |  |  left: IntLiteral { value: 2 }
+|  |  |  |  op: MulOp
+|  |  |  |  right: IntLiteral { value: 3 }
+
+==========
+const x = -1
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithUnOp
+|  |  |  op: MinusOp
+|  |  |  value: IntLiteral { value: 1 }
+
+==========
+const x = +1
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithUnOp
+|  |  |  op: PlusOp
+|  |  |  value: IntLiteral { value: 1 }
+
+==========
+const x = 1 * -2
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: IntLiteral { value: 1 }
+|  |  |  op: MulOp
+|  |  |  right: ArithUnOp
+|  |  |  |  op: MinusOp
+|  |  |  |  value: IntLiteral { value: 2 }
+
+==========
+const x = 1 +
+==========
+=== Expected parsing error(s):
+Unexpected input: <EOF>; expecting { '(', '{', '+', '-', 'true', 'false', 'if', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:13
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithBinOp
+|  |  |  left: IntLiteral { value: 1 }
+|  |  |  op: PlusOp
+|  |  |  right: <PARSING_ERROR>
+
+==========
+const x = --1
+==========
+=== Expected parsing error(s):
+Unwanted token: '-'; expecting { '(', '{', 'true', 'false', 'if', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:11
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: ArithUnOp
+|  |  |  op: MinusOp
+|  |  |  value: IntLiteral { value: 1 }
+

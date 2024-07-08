@@ -25,6 +25,12 @@ import com.limelanguage.ast.expressions.literals.BooleanLiteral
 import com.limelanguage.ast.expressions.literals.IntLiteral
 import com.limelanguage.ast.expressions.literals.SymbolLiteral
 import com.limelanguage.ast.expressions.literals.UnitLiteral
+import com.limelanguage.ast.expressions.operations.ArithBinOp
+import com.limelanguage.ast.expressions.operations.ArithUnOp
+import com.limelanguage.ast.operators.DivOp
+import com.limelanguage.ast.operators.MinusOp
+import com.limelanguage.ast.operators.MulOp
+import com.limelanguage.ast.operators.PlusOp
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.Token
 import org.antlr.v4.kotlinruntime.ast.Position
@@ -90,27 +96,6 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
         )
     }
 
-    // --- Function call
-
-    override fun visitFunCallExpr(ctx: LimeParser.FunCallExprContext): LimeNode? {
-        return FunCall(
-            unit,
-            loc(ctx),
-            callee = ctx.callee?.accept(this) as? Expr,
-            args = ctx.args?.accept(this) as? ArgList,
-        )
-    }
-
-    // --- Bracketed expression
-
-    override fun visitBracketExpr(ctx: LimeParser.BracketExprContext): LimeNode? {
-        return BracketExpr(
-            unit,
-            loc(ctx),
-            ctx.inner?.accept(this) as? Expr,
-        )
-    }
-
     // --- Conditional expression
 
     override fun visitConditionalExpr(ctx: LimeParser.ConditionalExprContext): LimeNode? {
@@ -143,9 +128,92 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
     override fun visitBlockElem(ctx: LimeParser.BlockElemContext): LimeNode? {
         return if (ctx.belem != null) {
             ctx.belem!!.accept(this)
-        } else {
+        } else if (ctx.uelem != null) {
             ctx.uelem!!.accept(this)
+        } else {
+            ctx.fdelem!!.accept(this)
         }
+    }
+
+    // --- Arithmetical operations
+
+    override fun visitUnPlusExpr(ctx: LimeParser.UnPlusExprContext): LimeNode? {
+        return ArithUnOp(
+            unit,
+            loc(ctx),
+            op = PlusOp(unit, loc(ctx.PLUS().symbol)),
+            operand = ctx.operand?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitUnMinusExpr(ctx: LimeParser.UnMinusExprContext): LimeNode? {
+        return ArithUnOp(
+            unit,
+            loc(ctx),
+            op = MinusOp(unit, loc(ctx.MINUS().symbol)),
+            operand = ctx.operand?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitPlusExpr(ctx: LimeParser.PlusExprContext): LimeNode? {
+        return ArithBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = PlusOp(unit, loc(ctx.PLUS().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitMinusExpr(ctx: LimeParser.MinusExprContext): LimeNode? {
+        return ArithBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = MinusOp(unit, loc(ctx.MINUS().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitMulExpr(ctx: LimeParser.MulExprContext): LimeNode? {
+        return ArithBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = MulOp(unit, loc(ctx.MUL().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitDivExpr(ctx: LimeParser.DivExprContext): LimeNode? {
+        return ArithBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = DivOp(unit, loc(ctx.DIV().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    // --- Function call
+
+    override fun visitFunCallExpr(ctx: LimeParser.FunCallExprContext): LimeNode? {
+        return FunCall(
+            unit,
+            loc(ctx),
+            callee = ctx.callee?.accept(this) as? Expr,
+            args = ctx.args?.accept(this) as? ArgList,
+        )
+    }
+
+    // --- Bracketed expression
+
+    override fun visitBracketExpr(ctx: LimeParser.BracketExprContext): LimeNode? {
+        return BracketExpr(
+            unit,
+            loc(ctx),
+            ctx.inner?.accept(this) as? Expr,
+        )
     }
 
     // --- Literals

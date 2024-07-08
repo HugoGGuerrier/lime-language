@@ -78,6 +78,16 @@ class ParserTest : BaselineTest() {
     }
 
     @Test
+    fun conditionalExprParsing() {
+        expectOk("const x = if true {0} else {1}")
+        expectOk("const x = if true {0}")
+
+        expectErr("const x = if true else {1}")
+        expectErr("const x = if true {0} else ")
+        expectErr("const x = if {0} else {1}")
+    }
+
+    @Test
     fun blockExprParsing() {
         expectOk("const x = {}")
         expectOk("const x = { var x = 0; 0 }")
@@ -116,13 +126,20 @@ class ParserTest : BaselineTest() {
     }
 
     @Test
-    fun conditionalExprParsing() {
-        expectOk("const x = if true {0} else {1}")
-        expectOk("const x = if true {0}")
+    fun arithmeticalOperationParsing() {
+        expectOk("const x = 1 + 2")
+        expectOk("const x = 1 - 2")
+        expectOk("const x = 1 * 2")
+        expectOk("const x = 1 / 2")
+        expectOk("const x = 1 + 2 - 3")
+        expectOk("const x = 1 * 2 + 3")
+        expectOk("const x = 1 + 2 * 3")
+        expectOk("const x = -1")
+        expectOk("const x = +1")
+        expectOk("const x = 1 * -2")
 
-        expectErr("const x = if true else {1}")
-        expectErr("const x = if true {0} else ")
-        expectErr("const x = if {0} else {1}")
+        expectErr("const x = 1 +")
+        expectErr("const x = --1")
     }
 
     @Test

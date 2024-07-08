@@ -23,10 +23,6 @@ open class LimeSafeBaseVisitor<T> : AbstractParseTreeVisitor<T?>(), LimeVisitor<
         return visitChildren(ctx)
     }
 
-    override fun visitBoundedExpr(ctx: LimeParser.BoundedExprContext): T? {
-        return visitChildren(ctx)
-    }
-
     override fun visitFunCallExpr(ctx: LimeParser.FunCallExprContext): T? {
         return visitChildren(ctx)
     }
@@ -36,10 +32,6 @@ open class LimeSafeBaseVisitor<T> : AbstractParseTreeVisitor<T?>(), LimeVisitor<
     }
 
     override fun visitLiteralExpr(ctx: LimeParser.LiteralExprContext): T? {
-        return visitChildren(ctx)
-    }
-
-    override fun visitFunDeclExpr(ctx: LimeParser.FunDeclExprContext): T? {
         return visitChildren(ctx)
     }
 
@@ -63,7 +55,47 @@ open class LimeSafeBaseVisitor<T> : AbstractParseTreeVisitor<T?>(), LimeVisitor<
         return visitChildren(ctx)
     }
 
+    override fun visitSumExpr(ctx: LimeParser.SumExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitPlusExpr(ctx: LimeParser.PlusExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitProdExpr(ctx: LimeParser.ProdExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitMinusExpr(ctx: LimeParser.MinusExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitMulExpr(ctx: LimeParser.MulExprContext): T? {
+        return visitChildren(ctx)
+    }
+
     override fun visitValueExpr(ctx: LimeParser.ValueExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitBoundedExpr(ctx: LimeParser.BoundedExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitDivExpr(ctx: LimeParser.DivExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitArithUnopExpr(ctx: LimeParser.ArithUnopExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitUnPlusExpr(ctx: LimeParser.UnPlusExprContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitUnMinusExpr(ctx: LimeParser.UnMinusExprContext): T? {
         return visitChildren(ctx)
     }
 

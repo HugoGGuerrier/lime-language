@@ -14,6 +14,12 @@ COLON : ':' ;
 SEMI_COLON : ';' ;
 EQ : '=' ;
 
+// Operators
+PLUS : '+' ;
+MINUS : '-' ;
+MUL : '*' ;
+DIV : '/' ;
+
 // Keywords
 TRUE : 'true' ;
 FALSE : 'false' ;
@@ -25,7 +31,7 @@ VAR : 'var' ;
 
 // Symbols
 ID : [a-zA-Z_][a-zA-A_0-9]* ;
-INT : [+\-]?[0-9]+ ;
+INT : [0-9]+ ;
 
 IGNORED : [ \t\r\n]+ -> skip ;
 LINE_COMMENT : '//' ~('\n'|'\r')* '\r'? '\n' -> channel(1) ;
@@ -47,26 +53,43 @@ const_decl: CONST name=ID (COLON type=ID)? EQ value=expr # ConstDecl ;
 fun_decl: FUN name=ID L_PAREN params=parameters R_PAREN (ARROW type=ID)? body=block_expr # FunDecl ;
 
 // Expressions
-expr: value_expr ;
-
-value_expr:
-      callee=value_expr L_PAREN args=arguments R_PAREN # FunCallExpr
-    | L_PAREN inner=expr R_PAREN # BracketExpr
-    | bounded_expr # BoundedExpr
-    | decl_expr # LiteralExpr
-    ;
-
-bounded_expr:
-      fun_decl # FunDeclExpr
-    | IF condition=expr thenExpr=block_expr (ELSE elseExpr=block_expr)? # ConditionalExpr
-    | block_expr # BlockExpr
-    ;
+expr: fun_decl | decl_expr ;
 
 decl_expr:
       const_decl # ConstDeclExpr
     | var_decl # VarDeclExpr
     | var_affect # VarAffectExpr
-    | literal # ValueExpr
+    | sum_expr # SumExpr
+    ;
+
+sum_expr:
+      left=sum_expr PLUS right=prod_expr # PlusExpr
+    | left=sum_expr MINUS right=prod_expr # MinusExpr
+    | prod_expr # ProdExpr
+    ;
+
+prod_expr:
+      left=prod_expr MUL right=arith_unop # MulExpr
+    | left=prod_expr DIV right=arith_unop # DivExpr
+    | arith_unop # ArithUnopExpr
+    ;
+
+arith_unop:
+      PLUS operand=value_expr # UnPlusExpr
+    | MINUS operand=value_expr # UnMinusExpr
+    | value_expr # ValueExpr
+    ;
+
+value_expr:
+      callee=value_expr L_PAREN args=arguments R_PAREN # FunCallExpr
+    | L_PAREN inner=expr R_PAREN # BracketExpr
+    | bounded_expr # BoundedExpr
+    | literal # LiteralExpr
+    ;
+
+bounded_expr:
+     IF condition=expr thenExpr=block_expr (ELSE elseExpr=block_expr)? # ConditionalExpr
+    | block_expr # BlockExpr
     ;
 
 literal:
@@ -79,7 +102,7 @@ literal:
 
 // Block expression
 block_expr: L_CURL block_elem* value=expr? R_CURL # Block ;
-block_elem: (belem=bounded_expr | uelem=expr SEMI_COLON | SEMI_COLON) # BlockElem ;
+block_elem: (fdelem=fun_decl | belem=bounded_expr | uelem=decl_expr SEMI_COLON | SEMI_COLON) # BlockElem ;
 
 // Parameters and arguments
 parameters: (parameter COMMA)* (parameter COMMA?)? # Params ;
