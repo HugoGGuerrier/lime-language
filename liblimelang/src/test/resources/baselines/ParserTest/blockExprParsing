@@ -124,7 +124,7 @@ Module (list node)
 const x = { true; const x = 0;
 ==========
 === Expected parsing error(s):
-Unwanted token: <EOF>; expecting { '(', '{', '}', ';', '+', '-', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
+Unwanted token: <EOF>; expecting { '(', '{', '}', ';', '+', '-', '!', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
 at 1:30
 Cannot process token: <EOF>; stop parsing 
 at 1:30
@@ -148,7 +148,7 @@ const x = { call( }
 === Expected parsing error(s):
 Cannot process token: '}'; stop parsing 
 at 1:18
-Unexpected input: '}'; expecting { '(', ')', '{', '+', '-', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
+Unexpected input: '}'; expecting { '(', ')', '{', '+', '-', '!', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
 at 1:18
 === Fallback tree:
 Module (list node)
@@ -167,7 +167,7 @@ const x = { error(; 0 }
 === Expected parsing error(s):
 Cannot process token: ';'; stop parsing 
 at 1:18
-Unexpected input: ';'; expecting { '(', ')', '{', '+', '-', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
+Unexpected input: ';'; expecting { '(', ')', '{', '+', '-', '!', 'true', 'false', 'if', 'fun', 'const', 'var', <IDENTIFIER>, <INT_LITERAL> } 
 at 1:18
 === Fallback tree:
 Module (list node)

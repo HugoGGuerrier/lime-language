@@ -1,0 +1,118 @@
+==========
+const x = a && b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: AndOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = a || b
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: OrOp
+|  |  |  right: SymbolLiteral { symbol: b }
+
+==========
+const x = !a
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicUnOp
+|  |  |  op: NotOp
+|  |  |  value: SymbolLiteral { symbol: a }
+
+==========
+const x = a || b && c
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicBinOp
+|  |  |  left: LogicBinOp
+|  |  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  |  op: OrOp
+|  |  |  |  right: SymbolLiteral { symbol: b }
+|  |  |  op: AndOp
+|  |  |  right: SymbolLiteral { symbol: c }
+
+==========
+const x = a && b || c
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicBinOp
+|  |  |  left: LogicBinOp
+|  |  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  |  op: AndOp
+|  |  |  |  right: SymbolLiteral { symbol: b }
+|  |  |  op: OrOp
+|  |  |  right: SymbolLiteral { symbol: c }
+
+==========
+const x = a && !b || c && !d
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicBinOp
+|  |  |  left: LogicBinOp
+|  |  |  |  left: LogicBinOp
+|  |  |  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  |  |  op: AndOp
+|  |  |  |  |  right: LogicUnOp
+|  |  |  |  |  |  op: NotOp
+|  |  |  |  |  |  value: SymbolLiteral { symbol: b }
+|  |  |  |  op: OrOp
+|  |  |  |  right: SymbolLiteral { symbol: c }
+|  |  |  op: AndOp
+|  |  |  right: LogicUnOp
+|  |  |  |  op: NotOp
+|  |  |  |  value: SymbolLiteral { symbol: d }
+
+==========
+const x = a &&
+==========
+=== Expected parsing error(s):
+Unexpected input: <EOF>; expecting { '(', '{', '+', '-', '!', 'true', 'false', 'if', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:14
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicBinOp
+|  |  |  left: SymbolLiteral { symbol: a }
+|  |  |  op: AndOp
+|  |  |  right: <PARSING_ERROR>
+
+==========
+const x = !!a
+==========
+=== Expected parsing error(s):
+Unwanted token: '!'; expecting { '(', '{', '+', '-', 'true', 'false', 'if', <IDENTIFIER>, <INT_LITERAL> } 
+at 1:11
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: None
+|  |  value: LogicUnOp
+|  |  |  op: NotOp
+|  |  |  value: SymbolLiteral { symbol: a }
+

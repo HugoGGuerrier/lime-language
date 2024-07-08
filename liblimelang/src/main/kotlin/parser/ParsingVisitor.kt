@@ -27,9 +27,14 @@ import com.limelanguage.ast.expressions.literals.SymbolLiteral
 import com.limelanguage.ast.expressions.literals.UnitLiteral
 import com.limelanguage.ast.expressions.operations.ArithBinOp
 import com.limelanguage.ast.expressions.operations.ArithUnOp
+import com.limelanguage.ast.expressions.operations.LogicBinOp
+import com.limelanguage.ast.expressions.operations.LogicUnOp
+import com.limelanguage.ast.operators.AndOp
 import com.limelanguage.ast.operators.DivOp
 import com.limelanguage.ast.operators.MinusOp
 import com.limelanguage.ast.operators.MulOp
+import com.limelanguage.ast.operators.NotOp
+import com.limelanguage.ast.operators.OrOp
 import com.limelanguage.ast.operators.PlusOp
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.Token
@@ -133,6 +138,37 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
         } else {
             ctx.fdelem!!.accept(this)
         }
+    }
+
+    // --- Logical operations
+
+    override fun visitNotExpr(ctx: LimeParser.NotExprContext): LimeNode? {
+        return LogicUnOp(
+            unit,
+            loc(ctx),
+            op = NotOp(unit, loc(ctx.NOT().symbol)),
+            operand = ctx.operand?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitAndExpr(ctx: LimeParser.AndExprContext): LimeNode? {
+        return LogicBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = AndOp(unit, loc(ctx.AND().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
+    }
+
+    override fun visitOrExpr(ctx: LimeParser.OrExprContext): LimeNode? {
+        return LogicBinOp(
+            unit,
+            loc(ctx),
+            left = ctx.left?.accept(this) as? Expr,
+            op = OrOp(unit, loc(ctx.OR().symbol)),
+            right = ctx.right?.accept(this) as? Expr,
+        )
     }
 
     // --- Arithmetical operations

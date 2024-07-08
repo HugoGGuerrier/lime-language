@@ -19,6 +19,9 @@ PLUS : '+' ;
 MINUS : '-' ;
 MUL : '*' ;
 DIV : '/' ;
+AND : '&&' ;
+OR : '||' ;
+NOT : '!' ;
 
 // Keywords
 TRUE : 'true' ;
@@ -59,6 +62,17 @@ decl_expr:
       const_decl # ConstDeclExpr
     | var_decl # VarDeclExpr
     | var_affect # VarAffectExpr
+    | logic_expr # LogicExpr
+    ;
+
+logic_expr:
+      left=logic_expr AND right=logic_unop_expr # AndExpr
+    | left=logic_expr OR right=logic_unop_expr # OrExpr
+    | logic_unop_expr # LogicUnopExpr
+    ;
+
+logic_unop_expr:
+      NOT operand=sum_expr # NotExpr
     | sum_expr # SumExpr
     ;
 
@@ -69,12 +83,12 @@ sum_expr:
     ;
 
 prod_expr:
-      left=prod_expr MUL right=arith_unop # MulExpr
-    | left=prod_expr DIV right=arith_unop # DivExpr
-    | arith_unop # ArithUnopExpr
+      left=prod_expr MUL right=arith_unop_expr # MulExpr
+    | left=prod_expr DIV right=arith_unop_expr # DivExpr
+    | arith_unop_expr # ArithUnopExpr
     ;
 
-arith_unop:
+arith_unop_expr:
       PLUS operand=value_expr # UnPlusExpr
     | MINUS operand=value_expr # UnMinusExpr
     | value_expr # ValueExpr
