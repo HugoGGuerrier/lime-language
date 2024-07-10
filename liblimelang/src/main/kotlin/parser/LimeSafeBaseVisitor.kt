@@ -207,6 +207,18 @@ open class LimeSafeBaseVisitor<T> : AbstractParseTreeVisitor<T?>(), LimeVisitor<
         return visitChildren(ctx)
     }
 
+    override fun visitSymbolType(ctx: LimeParser.SymbolTypeContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitFunType(ctx: LimeParser.FunTypeContext): T? {
+        return visitChildren(ctx)
+    }
+
+    override fun visitTypeExprs(ctx: LimeParser.TypeExprsContext): T? {
+        return visitChildren(ctx)
+    }
+
     // ----- Special visiting methods -----
 
     override fun visitChildren(node: RuleNode): T? {

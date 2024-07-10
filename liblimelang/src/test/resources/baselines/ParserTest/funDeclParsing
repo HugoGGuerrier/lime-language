@@ -19,7 +19,7 @@ Module (list node)
 |  |  params: ParamList (list node)
 |  |  |  <0>: Param
 |  |  |  |  name: Identifier { text: x }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  returnType: None
 |  |  body: BlockExpr
@@ -35,11 +35,11 @@ Module (list node)
 |  |  params: ParamList (list node)
 |  |  |  <0>: Param
 |  |  |  |  name: Identifier { text: x }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  |  <1>: Param
 |  |  |  |  name: Identifier { text: y }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  returnType: None
 |  |  body: BlockExpr
@@ -55,11 +55,11 @@ Module (list node)
 |  |  params: ParamList (list node)
 |  |  |  <0>: Param
 |  |  |  |  name: Identifier { text: x }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  |  <1>: Param
 |  |  |  |  name: Identifier { text: y }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  returnType: None
 |  |  body: BlockExpr
@@ -75,11 +75,11 @@ Module (list node)
 |  |  params: ParamList (list node)
 |  |  |  <0>: Param
 |  |  |  |  name: Identifier { text: x }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  |  <1>: Param
 |  |  |  |  name: Identifier { text: y }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: IntLiteral { value: 0 }
 |  |  returnType: None
 |  |  body: BlockExpr
@@ -93,7 +93,7 @@ Module (list node)
 |  <0>: FunDecl
 |  |  name: Identifier { text: test }
 |  |  params: ParamList (list node) <EMPTY>
-|  |  returnType: Identifier { text: int }
+|  |  returnType: SymbolType { symbol: int }
 |  |  body: BlockExpr
 |  |  |  elems: BlockElems (list node) <EMPTY>
 |  |  |  value: IntLiteral { value: 0 }
@@ -155,11 +155,11 @@ Module (list node)
 |  |  params: ParamList (list node)
 |  |  |  <0>: Param
 |  |  |  |  name: Identifier { text: x }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  |  <1>: Param
 |  |  |  |  name: Identifier { text: y }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  defaultValue: None
 |  |  returnType: None
 |  |  body: BlockExpr

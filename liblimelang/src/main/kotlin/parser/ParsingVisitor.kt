@@ -45,6 +45,10 @@ import com.limelanguage.ast.operators.NotOp
 import com.limelanguage.ast.operators.Operator
 import com.limelanguage.ast.operators.OrOp
 import com.limelanguage.ast.operators.PlusOp
+import com.limelanguage.ast.types.FunType
+import com.limelanguage.ast.types.SymbolType
+import com.limelanguage.ast.types.TypeExpr
+import com.limelanguage.ast.types.TypeExprs
 import org.antlr.v4.kotlinruntime.ParserRuleContext
 import org.antlr.v4.kotlinruntime.Token
 import org.antlr.v4.kotlinruntime.ast.Position
@@ -81,7 +85,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
             unit,
             loc(ctx),
             name = id(ctx.name),
-            type = Optional.ofNullable(id(ctx.type)),
+            type = Optional.ofNullable(ctx.type?.accept(this) as? TypeExpr),
             value = Optional.ofNullable(ctx.value?.accept(this) as? Expr),
         )
     }
@@ -95,7 +99,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
             unit,
             loc(ctx),
             name = id(ctx.name),
-            type = Optional.ofNullable(id(ctx.type)),
+            type = Optional.ofNullable(ctx.type?.accept(this) as? TypeExpr),
             value = ctx.value?.accept(this) as? Expr,
         )
     }
@@ -106,7 +110,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
             loc(ctx),
             name = id(ctx.name),
             params = ctx.params?.accept(this) as? ParamList,
-            returnType = Optional.ofNullable(id(ctx.type)),
+            returnType = Optional.ofNullable(ctx.type?.accept(this) as? TypeExpr),
             body = ctx.body?.accept(this) as? Expr,
         )
     }
@@ -287,7 +291,7 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
             unit,
             loc(ctx),
             name = id(ctx.name),
-            type = id(ctx.type),
+            type = ctx.type?.accept(this) as? TypeExpr,
             defaultValue = Optional.ofNullable(ctx.defaultValue?.accept(this) as? Expr),
         )
     }
@@ -307,6 +311,27 @@ class ParsingVisitor(val unit: AnalysisUnit) : LimeSafeBaseVisitor<LimeNode>() {
             name = Optional.ofNullable(id(ctx.name)),
             value = ctx.value?.accept(this) as? Expr,
         )
+    }
+
+    // ----- Type expressions -----
+
+    override fun visitSymbolType(ctx: LimeParser.SymbolTypeContext): LimeNode? {
+        return SymbolType(unit, loc(ctx), ctx.text)
+    }
+
+    override fun visitFunType(ctx: LimeParser.FunTypeContext): LimeNode? {
+        return FunType(
+            unit,
+            loc(ctx),
+            paramTypes = ctx.param_types?.accept(this) as? TypeExprs,
+            returnType = ctx.return_type?.accept(this) as? TypeExpr,
+        )
+    }
+
+    override fun visitTypeExprs(ctx: LimeParser.TypeExprsContext): LimeNode? {
+        val res = TypeExprs(unit, loc(ctx))
+        ctx.type_expr().forEach { res.children.add(it.accept(this) as TypeExpr) }
+        return res
     }
 
     // ----- Utils methods -----

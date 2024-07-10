@@ -216,6 +216,22 @@ class ParserTest : BaselineTest() {
         expectErr("const x = 1_var")
     }
 
+    @Test
+    fun typeExprParsing() {
+        // Symbol type
+        expectOk("const x: int = 0")
+        expectOk("const x: whatever = 0")
+
+        // Functional type
+        expectOk("const x: () -> int = 0")
+        expectOk("const x: (int) -> int = 0")
+        expectOk("const x: (int, bool) -> int = 0")
+        expectOk("const x: (int, bool,) -> int = 0")
+        expectOk("fun test(x: bool) -> (int) -> bool { 0 }")
+        expectErr("const x: (int) -> = 0")
+        expectErr("const x: (int -> bool = 0")
+    }
+
     // ----- Util functions -----
 
     /**

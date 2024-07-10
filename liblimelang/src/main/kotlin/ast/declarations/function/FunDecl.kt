@@ -6,6 +6,7 @@ import com.limelanguage.ast.Child
 import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.declarations.Decl
 import com.limelanguage.ast.expressions.Expr
+import com.limelanguage.ast.types.TypeExpr
 import java.util.Optional
 
 /** This class represents a function declaration in the Lime language. */
@@ -14,6 +15,6 @@ class FunDecl(
     location: SourceSection,
     @Child(0) val name: Identifier?,
     @Child(1) val params: ParamList?,
-    @Child(2) val returnType: Optional<Identifier>,
+    @Child(2) val returnType: Optional<TypeExpr>,
     @Child(3) val body: Expr?,
 ) : Decl(unit, location)

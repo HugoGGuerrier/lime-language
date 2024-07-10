@@ -6,6 +6,7 @@ import com.limelanguage.ast.Child
 import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.declarations.Decl
 import com.limelanguage.ast.expressions.Expr
+import com.limelanguage.ast.types.TypeExpr
 import java.util.Optional
 
 /** This class represents a function parameter in the Lime language. */
@@ -13,6 +14,6 @@ class Param(
     unit: AnalysisUnit,
     location: SourceSection,
     @Child(0) val name: Identifier?,
-    @Child(1) val type: Identifier?,
+    @Child(1) val type: TypeExpr?,
     @Child(2) val defaultValue: Optional<Expr>,
 ) : Decl(unit, location)

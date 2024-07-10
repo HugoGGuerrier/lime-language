@@ -13,7 +13,7 @@ const x: int = 0
 Module (list node)
 |  <0>: ConstDecl
 |  |  name: Identifier { text: x }
-|  |  type: Identifier { text: int }
+|  |  type: SymbolType { symbol: int }
 |  |  value: IntLiteral { value: 0 }
 
 ==========
@@ -46,7 +46,7 @@ Module (list node)
 const x: = 0
 ==========
 === Expected parsing error(s):
-Missing <IDENTIFIER> (got '=' instead) 
+Unexpected input: '='; expecting { '(', <IDENTIFIER> } 
 at 1:9
 === Fallback tree:
 Module (list node)

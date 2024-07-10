@@ -56,10 +56,10 @@ module_elems: module_elem* # ModuleElems ;
 module_elem: const_decl | fun_decl ;
 
 // Declarations/Affectations
-var_decl: VAR name=ID (COLON type=ID)? (EQ value=expr)? # VarDecl ;
+var_decl: VAR name=ID (COLON type=type_expr)? (EQ value=expr)? # VarDecl ;
 var_affect: name=ID EQ value=expr # VarAffect ;
-const_decl: CONST name=ID (COLON type=ID)? EQ value=expr # ConstDecl ;
-fun_decl: FUN name=ID L_PAREN params=parameters R_PAREN (ARROW type=ID)? body=block_expr # FunDecl ;
+const_decl: CONST name=ID (COLON type=type_expr)? EQ value=expr # ConstDecl ;
+fun_decl: FUN name=ID L_PAREN params=parameters R_PAREN (ARROW type=type_expr)? body=block_expr # FunDecl ;
 
 // Expressions
 expr: fun_decl | decl_expr ;
@@ -127,7 +127,7 @@ literal:
     | TRUE # TrueBooleanLiteral
     | FALSE # FalseBooleanLiteral
     | value=INT # IntLiteral
-    | id=ID # SymbolLiteral
+    | ID # SymbolLiteral
     ;
 
 // Block expression
@@ -136,7 +136,14 @@ block_elem: (fdelem=fun_decl | belem=bounded_expr | uelem=decl_expr SEMI_COLON |
 
 // Parameters and arguments
 parameters: (parameter COMMA)* (parameter COMMA?)? # Params ;
-parameter: name=ID COLON type=ID (EQ defaultValue=expr)? # Param ;
+parameter: name=ID COLON type=type_expr (EQ defaultValue=expr)? # Param ;
 
 arguments: (argument COMMA)* (argument COMMA?)? # Args ;
 argument: (name=ID EQ)? value=expr # Arg ;
+
+// Type expressions
+type_expr:
+      ID # SymbolType
+    | L_PAREN param_types=type_exprs R_PAREN ARROW return_type=type_expr # FunType
+    ;
+type_exprs: (type_expr COMMA)* (type_expr COMMA?)? # TypeExprs ;

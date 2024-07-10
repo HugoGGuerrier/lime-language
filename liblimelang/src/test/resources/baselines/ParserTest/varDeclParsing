@@ -40,7 +40,7 @@ Module (list node)
 |  |  |  elems: BlockElems (list node) <EMPTY>
 |  |  |  value: VarDecl
 |  |  |  |  name: Identifier { text: x }
-|  |  |  |  type: Identifier { text: int }
+|  |  |  |  type: SymbolType { symbol: int }
 |  |  |  |  value: IntLiteral { value: 0 }
 
 ==========

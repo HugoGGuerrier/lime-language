@@ -1,0 +1,118 @@
+==========
+const x: int = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: SymbolType { symbol: int }
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x: whatever = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: SymbolType { symbol: whatever }
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x: () -> int = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: FunType
+|  |  |  paramTypes: TypeExprs (list node) <EMPTY>
+|  |  |  returnType: SymbolType { symbol: int }
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x: (int) -> int = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: FunType
+|  |  |  paramTypes: TypeExprs (list node)
+|  |  |  |  <0>: SymbolType { symbol: int }
+|  |  |  returnType: SymbolType { symbol: int }
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x: (int, bool) -> int = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: FunType
+|  |  |  paramTypes: TypeExprs (list node)
+|  |  |  |  <0>: SymbolType { symbol: int }
+|  |  |  |  <1>: SymbolType { symbol: bool }
+|  |  |  returnType: SymbolType { symbol: int }
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x: (int, bool,) -> int = 0
+==========
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: FunType
+|  |  |  paramTypes: TypeExprs (list node)
+|  |  |  |  <0>: SymbolType { symbol: int }
+|  |  |  |  <1>: SymbolType { symbol: bool }
+|  |  |  returnType: SymbolType { symbol: int }
+|  |  value: IntLiteral { value: 0 }
+
+==========
+fun test(x: bool) -> (int) -> bool { 0 }
+==========
+Module (list node)
+|  <0>: FunDecl
+|  |  name: Identifier { text: test }
+|  |  params: ParamList (list node)
+|  |  |  <0>: Param
+|  |  |  |  name: Identifier { text: x }
+|  |  |  |  type: SymbolType { symbol: bool }
+|  |  |  |  defaultValue: None
+|  |  returnType: FunType
+|  |  |  paramTypes: TypeExprs (list node)
+|  |  |  |  <0>: SymbolType { symbol: int }
+|  |  |  returnType: SymbolType { symbol: bool }
+|  |  body: BlockExpr
+|  |  |  elems: BlockElems (list node) <EMPTY>
+|  |  |  value: IntLiteral { value: 0 }
+
+==========
+const x: (int) -> = 0
+==========
+=== Expected parsing error(s):
+Unexpected input: '='; expecting { '(', <IDENTIFIER> } 
+at 1:18
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: FunType
+|  |  |  paramTypes: TypeExprs (list node)
+|  |  |  |  <0>: SymbolType { symbol: int }
+|  |  |  returnType: <PARSING_ERROR>
+|  |  value: IntLiteral { value: 0 }
+
+==========
+const x: (int -> bool = 0
+==========
+=== Expected parsing error(s):
+Missing ')' (got '->' instead) 
+at 1:14
+=== Fallback tree:
+Module (list node)
+|  <0>: ConstDecl
+|  |  name: Identifier { text: x }
+|  |  type: FunType
+|  |  |  paramTypes: TypeExprs (list node)
+|  |  |  |  <0>: SymbolType { symbol: int }
+|  |  |  returnType: SymbolType { symbol: bool }
+|  |  value: IntLiteral { value: 0 }
+
