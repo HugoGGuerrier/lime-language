@@ -11,8 +11,8 @@ fun main() {
             const x = (
             """.trimIndent(),
         )
-    if (unit.diagnostics.isNotEmpty()) {
-        println(unit.diagnostics.map { it.message })
+    if (unit.parsingDiagnostics.isNotEmpty()) {
+        println(unit.parsingDiagnostics.map { it.message })
     }
     println(unit.root?.treeString())
 }

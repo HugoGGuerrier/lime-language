@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 
-/** This class represents a boolean literal in the Lime source code. */
+/** This node represents a boolean literal in the Lime source code. */
 class BooleanLiteral(
     unit: AnalysisUnit,
     location: SourceSection,

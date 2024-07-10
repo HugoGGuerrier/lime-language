@@ -6,7 +6,7 @@ import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 
 /**
- * This class represents a block expression in the Lime language, this is a collection of
+ * This node represents a block expression in the Lime language, this is a collection of
  * expressions.
  *
  * @property elems The list of expressions composing the block.

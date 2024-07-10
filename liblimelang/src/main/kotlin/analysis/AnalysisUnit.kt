@@ -15,8 +15,8 @@ import org.antlr.v4.kotlinruntime.CommonTokenStream
 class AnalysisUnit(val source: Source) {
     // ----- Properties -----
 
-    /** All diagnostics collected during the source analysis. */
-    val diagnostics: MutableList<Diagnostic> = ArrayList()
+    /** All diagnostics collected during the source parsing. */
+    val parsingDiagnostics: MutableList<Diagnostic> = ArrayList()
 
     /** The root of the analysis unit, result of the source parsing. */
     val root: LimeNode? = parseLimeSource()
@@ -42,20 +42,13 @@ class AnalysisUnit(val source: Source) {
             sourceModuleContext.accept(visitor)
         } catch (e: Exception) {
             e.printStackTrace()
-            addDiagnostic(e)
+            addParsingDiagnostic(Diagnostic(e.message ?: e.stackTraceToString()))
             null
         }
     }
 
     /** Add a diagnostic to this analysis unit. */
-    fun addDiagnostic(diagnostic: Diagnostic) {
-        diagnostics.add(diagnostic)
-    }
-
-    /** Add a diagnostic to this analysis unit from an exception. */
-    fun addDiagnostic(exception: Exception) {
-        diagnostics.add(
-            Diagnostic(exception.message ?: exception.stackTraceToString()),
-        )
+    fun addParsingDiagnostic(diagnostic: Diagnostic) {
+        parsingDiagnostics.add(diagnostic)
     }
 }

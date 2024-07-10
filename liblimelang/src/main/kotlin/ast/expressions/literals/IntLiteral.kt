@@ -6,7 +6,7 @@ import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 import java.math.BigInteger
 
-/** This class represents an arbitrary integer literal Lime sources. */
+/** This node represents an arbitrary integer literal Lime sources. */
 class IntLiteral(
     unit: AnalysisUnit,
     location: SourceSection,

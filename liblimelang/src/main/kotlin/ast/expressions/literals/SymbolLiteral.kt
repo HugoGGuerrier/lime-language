@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 
-/** This class represents symbolic access in the Lime language. */
+/** This node represents symbolic access in the Lime language. */
 class SymbolLiteral(
     unit: AnalysisUnit,
     location: SourceSection,

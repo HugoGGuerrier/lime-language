@@ -9,7 +9,7 @@ import com.limelanguage.ast.expressions.Expr
 import com.limelanguage.ast.types.TypeExpr
 import java.util.Optional
 
-/** This class represents a function declaration in the Lime language. */
+/** This node represents a function declaration in the Lime language. */
 class FunDecl(
     unit: AnalysisUnit,
     location: SourceSection,

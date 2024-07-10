@@ -22,7 +22,7 @@ class LexingErrorListener(val unit: AnalysisUnit) : BaseErrorListener() {
         msg: String,
         e: RecognitionException?,
     ) {
-        unit.diagnostics.add(
+        unit.addParsingDiagnostic(
             Diagnostic(
                 msg[0].uppercase() + msg.substring(1..<msg.length),
                 location =

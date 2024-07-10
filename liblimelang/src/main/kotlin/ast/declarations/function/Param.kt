@@ -9,7 +9,7 @@ import com.limelanguage.ast.expressions.Expr
 import com.limelanguage.ast.types.TypeExpr
 import java.util.Optional
 
-/** This class represents a function parameter in the Lime language. */
+/** This node represents a function parameter in the Lime language. */
 class Param(
     unit: AnalysisUnit,
     location: SourceSection,

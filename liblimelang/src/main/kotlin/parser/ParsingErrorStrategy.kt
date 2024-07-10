@@ -48,7 +48,7 @@ class ParsingErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
             e.expectedTokens!!.toSet().joinToString(prefix = "{ ", postfix = " }") {
                 tokenName(it, recognizer.vocabulary)
             }
-        unit.diagnostics.add(
+        unit.addParsingDiagnostic(
             Diagnostic(
                 "Unexpected input: ${tokenName(current, recognizer.vocabulary)}; expecting $expecting",
                 location =
@@ -66,7 +66,7 @@ class ParsingErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
         e: NoViableAltException,
     ) {
         val current = e.offendingToken!!
-        unit.addDiagnostic(
+        unit.addParsingDiagnostic(
             Diagnostic(
                 "Cannot process token: ${tokenName(current, recognizer.vocabulary)}; stop parsing",
                 location = SourceSection.fromToken(unit.source, current),
@@ -80,7 +80,7 @@ class ParsingErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
     ) {
         val ruleName = recognizer.ruleNames[recognizer.context!!.ruleIndex]
         val current = e.offendingToken!!
-        unit.diagnostics.add(
+        unit.addParsingDiagnostic(
             Diagnostic(
                 "Failed predicate: $ruleName ${e.message}",
                 location = SourceSection.fromToken(unit.source, current),
@@ -91,7 +91,7 @@ class ParsingErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
     override fun reportMissingToken(recognizer: Parser) {
         val missing = recognizer.expectedTokens.toSet().joinToString { tokenName(it, recognizer.vocabulary) }
         val current = recognizer.currentToken!!
-        unit.diagnostics.add(
+        unit.addParsingDiagnostic(
             Diagnostic(
                 "Missing $missing (got ${tokenName(current, recognizer.vocabulary)} instead)",
                 location = SourceSection.fromToken(unit.source, current),
@@ -105,7 +105,7 @@ class ParsingErrorStrategy(val unit: AnalysisUnit) : DefaultErrorStrategy() {
                 tokenName(it, recognizer.vocabulary)
             }
         val unwanted = recognizer.currentToken!!
-        unit.diagnostics.add(
+        unit.addParsingDiagnostic(
             Diagnostic(
                 "Unwanted token: ${tokenName(unwanted, recognizer.vocabulary)}; expecting $expecting",
                 location = SourceSection.fromToken(unit.source, unwanted),

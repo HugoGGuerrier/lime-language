@@ -243,9 +243,9 @@ class ParserTest : BaselineTest() {
         output(source)
         output("==========")
         val unit = context.analyseBuffer("testOk", source, reparse = true)
-        if (unit.diagnostics.size > 0) {
+        if (unit.parsingDiagnostics.size > 0) {
             val message = StringBuilder("=== Unexpected parsing error:").appendLine()
-            unit.diagnostics.forEach { d -> message.appendLine(d) }
+            unit.parsingDiagnostics.forEach { d -> message.appendLine(d) }
             fail(message.toString())
         } else {
             output(unit.root!!.treeString())
@@ -259,9 +259,9 @@ class ParserTest : BaselineTest() {
         output(source)
         output("==========")
         val unit = context.analyseBuffer("testErr", source, reparse = true)
-        if (unit.diagnostics.isNotEmpty()) {
+        if (unit.parsingDiagnostics.isNotEmpty()) {
             output("=== Expected parsing error(s):")
-            unit.diagnostics.forEach {
+            unit.parsingDiagnostics.forEach {
                 output(
                     """
                     ${it.message} 

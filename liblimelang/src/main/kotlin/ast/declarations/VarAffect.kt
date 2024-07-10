@@ -6,7 +6,7 @@ import com.limelanguage.ast.Child
 import com.limelanguage.ast.Identifier
 import com.limelanguage.ast.expressions.Expr
 
-/** This class represents a variable affectation in the Lime language. This node belongs to the declaration family. */
+/** This node represents a variable affectation in the Lime language. This node belongs to the declaration family. */
 class VarAffect(
     unit: AnalysisUnit,
     location: SourceSection,

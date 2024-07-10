@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.LimeNode
 
 /**
- * This class is the base of all operator nodes. Those are special nodes in the Lime AST, used to represent infix
+ * This node is the base of all operator nodes. Those are special nodes in the Lime AST, used to represent infix
  * operations such as "+", "-" or "&&".
  */
 abstract class Operator(

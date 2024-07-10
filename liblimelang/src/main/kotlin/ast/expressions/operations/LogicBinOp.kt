@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.expressions.Expr
 import com.limelanguage.ast.operators.Operator
 
-/** This class represents all logical binary operations in Lime. */
+/** This node represents all logical binary operations in Lime. */
 class LogicBinOp(
     unit: AnalysisUnit,
     location: SourceSection,

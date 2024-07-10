@@ -9,7 +9,7 @@ import com.limelanguage.ast.expressions.Expr
 import java.util.Optional
 
 /**
- * This class represents an argument in the Lime language. It can be a function argument, for
+ * This node represents an argument in the Lime language. It can be a function argument, for
  * example.
  */
 class Arg(

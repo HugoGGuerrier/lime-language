@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.expressions.Expr
 import com.limelanguage.ast.operators.Operator
 
-/** This class represents all arithmetical unary operations in Lime. */
+/** This node represents all arithmetical unary operations in Lime. */
 class ArithUnOp(
     unit: AnalysisUnit,
     location: SourceSection,

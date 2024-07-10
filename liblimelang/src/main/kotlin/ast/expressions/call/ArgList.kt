@@ -4,7 +4,7 @@ import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.LimeListNode
 
-/** This class represents a list of arguments. This is used, for example, in function call nodes. */
+/** This node represents a list of arguments. This is used, for example, in function call nodes. */
 class ArgList(
     unit: AnalysisUnit,
     location: SourceSection,

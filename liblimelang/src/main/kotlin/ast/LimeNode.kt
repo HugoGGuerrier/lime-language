@@ -9,7 +9,7 @@ import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.memberProperties
 
 /**
- * This class is the base of all lime nodes, it contains all common information and operations
+ * This node is the base of all lime nodes, it contains all common information and operations
  * require for all AST node types.
  *
  * AST nodes have children denoted by the [Child] annotation. All children are nullable to allow error recovery from the

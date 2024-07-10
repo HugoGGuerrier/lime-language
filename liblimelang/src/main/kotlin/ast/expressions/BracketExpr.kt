@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.Child
 
 /**
- * This class represents a bracketed expression in the Lime language, it is stored in the AST to keep this parsing
+ * This node represents a bracketed expression in the Lime language, it is stored in the AST to keep this parsing
  * information.
  */
 class BracketExpr(

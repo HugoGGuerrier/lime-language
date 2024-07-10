@@ -5,7 +5,7 @@ import com.limelanguage.analysis.AnalysisUnit
 import com.limelanguage.ast.expressions.Expr
 import com.limelanguage.ast.operators.Operator
 
-/** This class represents all arithmetical binary operations in the Lime language. */
+/** This node represents all arithmetical binary operations in the Lime language. */
 class ArithBinOp(
     unit: AnalysisUnit,
     location: SourceSection,

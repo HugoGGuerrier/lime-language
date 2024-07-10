@@ -6,7 +6,7 @@ import com.limelanguage.ast.Child
 import com.limelanguage.ast.expressions.Expr
 
 /**
- * This class represents a function call expression in the Lime language. This represents the value
+ * This node represents a function call expression in the Lime language. This represents the value
  * resulting of the call of [callee] with [args]
  */
 class FunCall(
