@@ -243,12 +243,12 @@ class ParserTest : BaselineTest() {
         output(source)
         output("==========")
         val unit = context.analyseBuffer("testOk", source, reparse = true)
-        if (unit.parsingDiagnostics.size > 0) {
+        if (unit.parsingDiagnostics.isNotEmpty()) {
             val message = StringBuilder("=== Unexpected parsing error:").appendLine()
             unit.parsingDiagnostics.forEach { d -> message.appendLine(d) }
             fail(message.toString())
         } else {
-            output(unit.root!!.treeString())
+            output(unit.rootNode!!.treeString())
             output("")
         }
     }
@@ -274,10 +274,10 @@ class ParserTest : BaselineTest() {
                 )
             }
             output("=== Fallback tree:")
-            output(unit.root?.treeString())
+            output(unit.rootNode?.treeString())
             output("")
         } else {
-            fail("Expecting a parsing error, got the tree:\n${unit.root?.treeString()}")
+            fail("Expecting a parsing error, got the tree:\n${unit.rootNode?.treeString()}")
         }
     }
 }

@@ -44,7 +44,7 @@ data class Source(val identifier: SourceId, val content: String) {
         n: Int,
     ): List<String> = getLines().subList(start - 1, start - 1 + n)
 
-    // ----- Overrides -----
+    override fun toString(): String = "Source(id=\"$identifier\")"
 
     override fun hashCode(): Int = identifier.hashCode()
 

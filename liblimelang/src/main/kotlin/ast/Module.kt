@@ -11,4 +11,11 @@ import com.limelanguage.ast.declarations.Decl
 class Module(
     unit: AnalysisUnit,
     location: SourceSection,
-) : LimeListNode<Decl>(unit, location)
+) : LimeListNode<Decl>(unit, location) {
+    // ----- Methods -----
+
+    override fun envSpec() {
+        openEnv()
+        populateChildren(childrenLexicalEnvironment!!)
+    }
+}

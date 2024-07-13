@@ -1,0 +1,40 @@
+==========
+const x = 0
+==========
+LexEnv(bindings={}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:0 - 1:11>}, children=[])])
+
+==========
+const x = 0 const y = x
+==========
+LexEnv(bindings={}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:0 - 1:11>, y=<ConstDecl | "testOk" 1:12 - 1:23>}, children=[])])
+
+==========
+const x = x
+==========
+=== Expected parsing error(s):
+Cannot find this symbol in the current scope
+[]
+at 1:10
+=== Fallback lexical environment
+LexEnv(bindings={}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:0 - 1:11>}, children=[])])
+
+==========
+const x = 0 const x = 0
+==========
+=== Expected parsing error(s):
+This symbol already exists in the current scope
+[DiagnosticHint(message=Previously declared here, sourceSection=SourceSection(source=Source(id="testOk"), start=SourceLocation(line=1, column=0), end=SourceLocation(line=1, column=11)))]
+at 1:18
+=== Fallback lexical environment
+LexEnv(bindings={}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:0 - 1:11>}, children=[])])
+
+==========
+const x = y
+==========
+=== Expected parsing error(s):
+Cannot find this symbol in the current scope
+[]
+at 1:10
+=== Fallback lexical environment
+LexEnv(bindings={}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:0 - 1:11>}, children=[])])
+

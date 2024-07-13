@@ -17,4 +17,12 @@ class FunDecl(
     @Child(1) val params: ParamList?,
     @Child(2) val returnType: Optional<TypeExpr>,
     @Child(3) val body: Expr?,
-) : Decl(unit, location)
+) : Decl(unit, location) {
+    // ----- Methods -----
+
+    override fun envSpec() {
+        openEnv()
+        if (name != null) insertOrDiag(name.text, name)
+        populateChildren(childrenLexicalEnvironment!!)
+    }
+}

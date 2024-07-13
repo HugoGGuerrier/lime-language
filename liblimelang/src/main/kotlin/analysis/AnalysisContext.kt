@@ -16,11 +16,18 @@ class AnalysisContext(val charset: Charset = Charsets.UTF_8) {
     /** All analysed sources, linked to their analysis units. */
     private val units: MutableMap<Source, AnalysisUnit> = HashMap()
 
+    /**
+     * The prelude lexical environment. Since there is no prelude file for now, we use a synthetic lexical environment
+     * with synthetic built-in nodes.
+     */
+    internal val preludeLexicalEnvironment: LexicalEnvironment = LexicalEnvironment(null)
+
     // ----- Methods ------
 
     /**
      * Analyse a file and get the resulting analysis unit from it if possible. If the file doesn't
      * exist or is not readable, then return null.
+     * This method uses the [analyseBuffer] to analyse the content of the given file.
      *
      * @param charset Decode the given file with another charset. Its default value is one provided
      *                during the context initialization.
@@ -40,7 +47,8 @@ class AnalysisContext(val charset: Charset = Charsets.UTF_8) {
     /**
      * Analyse the buffer and return an analysis unit for it. The analysis of a buffer has several
      * steps:
-     *  - Parsing the provided buffer
+     *  - Parsing the provided buffer.
+     *  - Populating the lexical environments in the result tree, if there is one.
      *
      * @param reparse Whether to reparse the buffer, even if it has already been parsed.
      */
@@ -57,7 +65,7 @@ class AnalysisContext(val charset: Charset = Charsets.UTF_8) {
         }
 
         // Else, analyse the source and place it in the cache
-        val unit = AnalysisUnit(source)
+        val unit = AnalysisUnit(this, source)
         units[source] = unit
         return unit
     }

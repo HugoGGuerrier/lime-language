@@ -12,6 +12,13 @@ abstract class LimeListNode<T : LimeNode>(
     location: SourceSection,
     val children: MutableList<T> = ArrayList(),
 ) : LimeNode(unit, location) {
+    // ----- Properties -----
+
+    /** Overriding the [childrenWithName] property since children don't have any names. */
+    override val childrenWithName: List<ChildPair> by lazy {
+        children.mapIndexed { i, c -> ChildPair(i.toString(), c) }
+    }
+
     // ----- Methods -----
 
     override fun treeString(indentLevel: Int): String {

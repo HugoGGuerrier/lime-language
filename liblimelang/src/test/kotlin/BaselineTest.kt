@@ -128,18 +128,18 @@ abstract class BaselineTest {
      */
     @AfterEach
     fun compareOutput() {
-        // If required, write the baseline file
-        if (shouldRewrite) {
-            baselineFile.writeText(testOutput.toString())
-        }
-
         // Compute the diff message
         val diffMessage =
             computeDiffMessage(diffRowGenerator.generateDiffRows(baseline, testOutput.lines()))
 
-        // Finally clean the test output and fail if needed
-        testOutput.clear()
         if (diffMessage != null) {
+            // If required, write the baseline file
+            if (shouldRewrite) {
+                baselineFile.writeText(testOutput.toString())
+            }
+
+            // Finally clean the test output and fail if needed
+            testOutput.clear()
             val message =
                 StringBuilder("Differences in test output:")
                     .appendLine()
@@ -149,5 +149,6 @@ abstract class BaselineTest {
                     .append(diffMessage)
             throw AssertionError(message.toString())
         }
+
     }
 }

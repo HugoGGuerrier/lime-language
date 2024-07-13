@@ -15,4 +15,11 @@ class VarDecl(
     @Child(0) val name: Identifier?,
     @Child(1) val type: Optional<TypeExpr>,
     @Child(2) val value: Optional<Expr>?,
-) : Decl(unit, location)
+) : Decl(unit, location) {
+    // ----- Methods -----
+
+    override fun envSpec() {
+        populateChildren()
+        if (name != null) insertOrDiag(name.text, name)
+    }
+}

@@ -14,6 +14,9 @@ data class SourceSection(val source: Source, val start: SourceLocation, val end:
 
     /** Get the lines corresponding to the source section. */
     fun getLines(): List<String> = this.source.getLines(start.line, end.line + 1 - start.line)
+
+    /** Get the pretty representation of this source section */
+    fun prettyString(): String = "\"${source.identifier}\" ${start.prettyString()} - ${end.prettyString()}"
 }
 
 /** This class represents a location in a source, defined by its [line] and [column]. */
@@ -21,4 +24,8 @@ data class SourceLocation(val line: Int, val column: Int) {
     companion object {
         val FIRST: SourceLocation = SourceLocation(1, 0)
     }
+
+    // ----- Methods -----
+
+    fun prettyString(): String = "$line:$column"
 }

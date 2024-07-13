@@ -1,0 +1,55 @@
+==========
+fun main() {}
+==========
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:13>}, children=[LexEnv(bindings={}, children=[LexEnv(bindings={}, children=[])])])])
+
+==========
+fun main(x: int) {}
+==========
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:19>}, children=[LexEnv(bindings={x=<Param | "testOk" 1:9 - 1:15>}, children=[LexEnv(bindings={}, children=[])])])])
+
+==========
+fun main(x: int) { const x = 0 }
+==========
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:32>}, children=[LexEnv(bindings={x=<Param | "testOk" 1:9 - 1:15>}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:19 - 1:30>}, children=[])])])])
+
+==========
+fun main(main: int) { const x = 0 }
+==========
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:35>}, children=[LexEnv(bindings={main=<Param | "testOk" 1:9 - 1:18>}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:22 - 1:33>}, children=[])])])])
+
+==========
+fun main() { main() }
+==========
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:21>}, children=[LexEnv(bindings={}, children=[LexEnv(bindings={}, children=[])])])])
+
+==========
+fun main() {} fun main() {}
+==========
+=== Expected parsing error(s):
+This symbol already exists in the current scope
+[DiagnosticHint(message=Previously declared here, sourceSection=SourceSection(source=Source(id="testOk"), start=SourceLocation(line=1, column=0), end=SourceLocation(line=1, column=13)))]
+at 1:18
+=== Fallback lexical environment
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:13>}, children=[LexEnv(bindings={}, children=[LexEnv(bindings={}, children=[])]), LexEnv(bindings={}, children=[LexEnv(bindings={}, children=[])])])])
+
+==========
+fun main(x: int, x: int) {}
+==========
+=== Expected parsing error(s):
+This symbol already exists in the current scope
+[DiagnosticHint(message=Previously declared here, sourceSection=SourceSection(source=Source(id="testOk"), start=SourceLocation(line=1, column=9), end=SourceLocation(line=1, column=15)))]
+at 1:17
+=== Fallback lexical environment
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:27>}, children=[LexEnv(bindings={x=<Param | "testOk" 1:9 - 1:15>}, children=[LexEnv(bindings={}, children=[])])])])
+
+==========
+fun main(x: int) { const y = z }
+==========
+=== Expected parsing error(s):
+Cannot find this symbol in the current scope
+[]
+at 1:29
+=== Fallback lexical environment
+LexEnv(bindings={}, children=[LexEnv(bindings={main=<FunDecl | "testOk" 1:0 - 1:32>}, children=[LexEnv(bindings={x=<Param | "testOk" 1:9 - 1:15>}, children=[LexEnv(bindings={y=<ConstDecl | "testOk" 1:19 - 1:30>}, children=[])])])])
+

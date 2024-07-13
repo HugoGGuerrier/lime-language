@@ -17,4 +17,11 @@ class BlockExpr(
     location: SourceSection,
     @Child(0) val elems: BlockElems?,
     @Child(1) val value: Expr?,
-) : Expr(unit, location)
+) : Expr(unit, location) {
+    // ----- Methods -----
+
+    override fun envSpec() {
+        openEnv()
+        populateChildren(childrenLexicalEnvironment!!)
+    }
+}

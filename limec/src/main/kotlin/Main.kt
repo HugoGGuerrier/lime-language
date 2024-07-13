@@ -6,13 +6,13 @@ fun main() {
     val context = AnalysisContext()
     val unit =
         context.analyseBuffer(
-            "test",
+            "test.lime",
             """
-            const x = (
+            fun f() { var x = x }
             """.trimIndent(),
         )
-    if (unit.parsingDiagnostics.isNotEmpty()) {
-        println(unit.parsingDiagnostics.map { it.message })
-    }
-    println(unit.root?.treeString())
+    println(unit.parsingDiagnostics)
+    println(unit.lexEnvDiagnostics)
+    println(unit.rootNode?.treeString())
+    println(unit.rootNode?.nodeLexicalEnvironment)
 }
