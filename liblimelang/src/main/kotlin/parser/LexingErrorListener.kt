@@ -12,7 +12,7 @@ import org.antlr.v4.kotlinruntime.Recognizer
 import org.antlr.v4.kotlinruntime.atn.ATNConfigSet
 import org.antlr.v4.kotlinruntime.dfa.DFA
 
-/** This class is the error listener destined to the Lime lexer. */
+/** This class is the error listener for the Lime lexer. */
 class LexingErrorListener(val unit: AnalysisUnit) : BaseErrorListener() {
     override fun syntaxError(
         recognizer: Recognizer<*, *>,
@@ -33,39 +33,5 @@ class LexingErrorListener(val unit: AnalysisUnit) : BaseErrorListener() {
                     ),
             ),
         )
-    }
-
-    override fun reportAmbiguity(
-        recognizer: Parser,
-        dfa: DFA,
-        startIndex: Int,
-        stopIndex: Int,
-        exact: Boolean,
-        ambigAlts: BitSet,
-        configs: ATNConfigSet,
-    ) {
-        TODO()
-    }
-
-    override fun reportAttemptingFullContext(
-        recognizer: Parser,
-        dfa: DFA,
-        startIndex: Int,
-        stopIndex: Int,
-        conflictingAlts: BitSet,
-        configs: ATNConfigSet,
-    ) {
-        TODO()
-    }
-
-    override fun reportContextSensitivity(
-        recognizer: Parser,
-        dfa: DFA,
-        startIndex: Int,
-        stopIndex: Int,
-        prediction: Int,
-        configs: ATNConfigSet,
-    ) {
-        TODO()
     }
 }
