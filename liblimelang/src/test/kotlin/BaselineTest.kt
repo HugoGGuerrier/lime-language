@@ -149,6 +149,5 @@ abstract class BaselineTest {
                     .append(diffMessage)
             throw AssertionError(message.toString())
         }
-
     }
 }

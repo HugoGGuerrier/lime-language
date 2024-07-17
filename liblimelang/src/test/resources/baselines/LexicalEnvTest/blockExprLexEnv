@@ -1,5 +1,5 @@
 ==========
 const x = { var x; { var x; x } { var x } }
 ==========
-LexEnv(bindings={}, children=[LexEnv(bindings={x=<ConstDecl | "testOk" 1:0 - 1:43>}, children=[LexEnv(bindings={x=<VarDecl | "testOk" 1:12 - 1:17>}, children=[LexEnv(bindings={x=<VarDecl | "testOk" 1:21 - 1:26>}, children=[]), LexEnv(bindings={x=<VarDecl | "testOk" 1:34 - 1:39>}, children=[])])])])
+LexEnv(bindings={x=<ConstDecl | "testOk" 1:0 - 1:43>}, children=[LexEnv(bindings={x=<VarDecl | "testOk" 1:12 - 1:17>}, children=[LexEnv(bindings={x=<VarDecl | "testOk" 1:21 - 1:26>}, children=[]), LexEnv(bindings={x=<VarDecl | "testOk" 1:34 - 1:39>}, children=[])])])
 

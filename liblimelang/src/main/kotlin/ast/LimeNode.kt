@@ -96,7 +96,7 @@ abstract class LimeNode(val unit: AnalysisUnit, val location: SourceSection) {
         symbol: String,
         diagLoc: LimeNode = this,
         lexicalEnvironment: LexicalEnvironment = nodeLexicalEnvironment,
-        then: (() -> Unit)? = null
+        then: (() -> Unit)? = null,
     ) {
         try {
             lexicalEnvironment.insert(symbol, this)
@@ -124,7 +124,7 @@ abstract class LimeNode(val unit: AnalysisUnit, val location: SourceSection) {
         symbol: String,
         diagLoc: LimeNode = this,
         lexicalEnvironment: LexicalEnvironment = nodeLexicalEnvironment,
-        then: ((LimeNode) -> Unit)? = null
+        then: ((LimeNode) -> Unit)? = null,
     ) {
         val res = lexicalEnvironment.lookup(symbol, LookupMode.RECURSIVE)
         if (res != null) {

@@ -9,18 +9,16 @@ import java.nio.charset.Charset
  * source files analysis and already analysed sources.
  *
  * @property charset The default charset to decode source files in. Its default value is UTF_8.
+ * @property debug Whether the context should behave as for debugging purposes.
  */
-class AnalysisContext(val charset: Charset = Charsets.UTF_8) {
+class AnalysisContext(val charset: Charset = Charsets.UTF_8, val debug: Boolean = false) {
     // ----- Properties -----
 
-    /** All analysed sources, linked to their analysis units. */
-    private val units: MutableMap<Source, AnalysisUnit> = HashMap()
+    /** Special unit containing the Lime prelude. */
+    internal val preludeUnit: AnalysisUnit = Prelude.preludeUnit(this)
 
-    /**
-     * The prelude lexical environment. Since there is no prelude file for now, we use a synthetic lexical environment
-     * with synthetic built-in nodes.
-     */
-    internal val preludeLexicalEnvironment: LexicalEnvironment = LexicalEnvironment(null)
+    /** All analysed sources, linked to their analysis units. */
+    private val units: MutableMap<Source, AnalysisUnit> = HashMap(mapOf(Prelude.preludeSource to preludeUnit))
 
     // ----- Methods ------
 

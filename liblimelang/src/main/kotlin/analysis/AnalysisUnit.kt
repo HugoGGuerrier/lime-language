@@ -16,7 +16,7 @@ import org.antlr.v4.kotlinruntime.CommonTokenStream
  * This class cannot be created by itself, you should use the [AnalysisContext.analyseBuffer] and
  * [AnalysisContext.analyseFile] methods to create one.
  */
-class AnalysisUnit(
+open class AnalysisUnit internal constructor(
     val context: AnalysisContext,
     val source: Source,
 ) {
@@ -36,7 +36,7 @@ class AnalysisUnit(
      * The root node of the analysis unit, result of the source parsing. This property is lazily computed when first
      * accessed.
      */
-    val rootNode: LimeNode? =
+    open val rootNode: LimeNode? =
         run {
             // Create lexer and parser
             val lexer = LimeLexer(CharStreams.fromString(source.content))
@@ -52,13 +52,18 @@ class AnalysisUnit(
                 val res = sourceModuleContext.accept(visitor)
 
                 // Compute and populate all lexical environments in the result AST
-                res?.populateLexicalEnv(LexicalEnvironment(context.preludeLexicalEnvironment))
+                res?.populateLexicalEnv(LexicalEnvironment(context.preludeUnit.rootNode!!.nodeLexicalEnvironment))
 
                 // Return the result node
                 res
             } catch (e: Exception) {
-                e.printStackTrace()
-                addParsingDiagnostic(Diagnostic(e.message ?: e.stackTraceToString()))
+                addParsingDiagnostic(
+                    Diagnostic(
+                        "Unexpected error during analysis: ${
+                            if (context.debug) e.stackTraceToString() else e.message ?: e::class.simpleName
+                        }",
+                    ),
+                )
                 null
             }
         }
@@ -72,4 +77,13 @@ class AnalysisUnit(
 
     /** Add a diagnostic to the lexical environment ones */
     fun addLexEnvDiagnostic(diagnostic: Diagnostic) = privateLexEnvDiagnostics.add(diagnostic)
+}
+
+/** This class is a special analysis unit, designed to the synthesised without parsing any source code. */
+internal class SyntheticAnalysisUnit(
+    context: AnalysisContext,
+    source: Source,
+) : AnalysisUnit(context, source) {
+    override var rootNode: LimeNode? = null
+        internal set
 }

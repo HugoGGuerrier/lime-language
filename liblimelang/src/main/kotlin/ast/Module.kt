@@ -15,7 +15,8 @@ class Module(
     // ----- Methods -----
 
     override fun envSpec() {
-        openEnv()
-        populateChildren(childrenLexicalEnvironment!!)
+        // A module doesn't open a new lexical environment, it will populate its given lexical environment
+        // TODO: Handle the module in a declarative way
+        populateChildren()
     }
 }
