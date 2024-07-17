@@ -1,9 +1,11 @@
-package com.limelanguage.parser
+package com.limelanguage.parser.error
 
 import com.limelanguage.Diagnostic
 import com.limelanguage.SourceLocation
 import com.limelanguage.SourceSection
 import com.limelanguage.analysis.AnalysisUnit
+import com.limelanguage.parser.LimeParser
+import com.limelanguage.parser.fromToken
 import org.antlr.v4.kotlinruntime.DefaultErrorStrategy
 import org.antlr.v4.kotlinruntime.FailedPredicateException
 import org.antlr.v4.kotlinruntime.InputMismatchException

@@ -3,11 +3,11 @@ package com.limelanguage.analysis
 import com.limelanguage.Diagnostic
 import com.limelanguage.Source
 import com.limelanguage.ast.LimeNode
-import com.limelanguage.parser.LexingErrorListener
 import com.limelanguage.parser.LimeLexer
 import com.limelanguage.parser.LimeParser
-import com.limelanguage.parser.ParsingErrorStrategy
 import com.limelanguage.parser.ParsingVisitor
+import com.limelanguage.parser.error.LexingErrorListener
+import com.limelanguage.parser.error.ParsingErrorStrategy
 import org.antlr.v4.kotlinruntime.CharStreams
 import org.antlr.v4.kotlinruntime.CommonTokenStream
 
