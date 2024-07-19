@@ -15,8 +15,8 @@ dependencies {
     implementation(project(":liblimelang"))
 
     // Mordant, an output styling library
-    implementation("com.github.ajalt.mordant:mordant:2.6.0")
-    implementation("com.github.ajalt.mordant:mordant-coroutines:2.6.0")
+    implementation("com.github.ajalt.mordant:mordant:2.7.2")
+    implementation("com.github.ajalt.mordant:mordant-coroutines:2.7.2")
 
     // Test dependencies
     testImplementation(kotlin("test"))
